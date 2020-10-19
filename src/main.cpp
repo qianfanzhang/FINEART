@@ -1,8 +1,8 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "image.hpp"
-#include "light.hpp"
 #include "scene_parser.hpp"
+#include "path_tracing.hpp"
 #include "random.hpp"
 #include <cassert>
 #include <cmath>
@@ -23,28 +23,23 @@ int main(int argc, char *argv[]) {
 
     SceneParser parser(inputFile.c_str());
     Camera *camera = parser.getCamera();
-    Group *baseGroup = parser.getGroup();
+    Group *group = parser.getGroup();
     Image image(camera->getWidth(), camera->getHeight());
+    Vector3f background_color = parser.getBackgroundColor();
+    std::random_device rd;
 
+#pragma omp parallel for schedule(dynamic, 1)
     for (int x = 0; x < camera->getWidth(); ++x) {
+        RandomGenerator gen(rd());
+        PathTracing pt(group, background_color, 6, gen);
         for (int y = 0; y < camera->getHeight(); ++y) {
             Vector3f color = Vector3f::ZERO;
             for (int i = 0; i < numSamples; ++i) {
-                Ray ray = camera->generateRay(Vector2f(x + Random::tent(), y + Random::tent()));
-                
-                // Hit hit;
-                // if (baseGroup->intersect(ray, hit, 0)) {
-                //     Vector3f finalColor = Vector3f::ZERO;
-                //     for (int li = 0; li < parser.getNumLights(); ++li) {
-                //         Light *light = parser.getLight(li);
-                //         Vector3f L, lightColor;
-                //         light->getIllumination(ray.pointAtParameter(hit.getT()), L, lightColor);
-                //         color += hit.getMaterial()->shade(ray, hit, L, lightColor) * (1. / numSamples);
-                //     }
-                // }
+                // Ray ray = camera->generateRay(Vector2f(x, y));
+                Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f());
+                color += pt.getRadiance(ray) * (1. / numSamples);
             }
             image.SetPixel(x, y, color);
-            // image.SetPixel(x, y, parser.getBackgroundColor());
         }
     }
 

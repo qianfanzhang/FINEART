@@ -17,11 +17,11 @@ public:
         Vector3f oc = center - r.getOrigin();
         float b = Vector3f::dot(oc, r.getDirection());
         float det = b * b - oc.squaredLength() + radius * radius;
-        if (det >= 0) {
-            det = sqrtf(det);
+        if (det > 0) {
+            det = std::sqrt(det);
             float t;
             if (((t = b - det) >= tmin || (t = b + det) >= tmin) && h.getT() > t) {
-                h = Hit(t, material, (r.pointAtParameter(t) - center).normalized());
+                h = Hit(t, material, r.pointAtParameter(t) - center);
                 return true;
             }
         }

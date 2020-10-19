@@ -17,6 +17,10 @@ public:
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
             if (t >= tmin && h.getT() > t) {
+                // printf("v=%.2f\n", v);
+                // Vector3f d = r.getDirection();
+                // printf("dir=%.2f %.2f %.2f %.2f\n", d.x(), d.y(), d.z(), d.length());
+                // printf("normal=%.2f %.2f %.2f\n", normal.x(), normal.y(), normal.z());
                 h = Hit(t, material, normal);
                 return true;
             }
