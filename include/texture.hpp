@@ -8,18 +8,17 @@
 
 class Texture {
 public:
-    Texture() {
-        image = nullptr;
-        color = Vector3f(1, 1, 1);
+    Texture(Vector3f color) {
+        this->image = nullptr;
+        this->color = color;
+    }
+
+    Texture(const char *image_file) {
+        this->image = Image::LoadTGA(image_file);
+        this->color = Vector3f(1, 1, 1);
     }
 
     Texture(const Texture &texture) = delete;
-
-    Texture(Texture &&texture) {
-        image = texture.image;
-        color = texture.color;
-        texture.image = nullptr;
-    }
 
     ~Texture() {
         if (image != nullptr)
@@ -48,7 +47,7 @@ public:
         return color;
     }
 
-    const Vector3f &getColor(const Vector2f &uv_point, const Vector3f &point) const {
+    const Vector3f &getColor(const Vector2f &uv_point) const {
         assert(isImage());
 
         int x = Utils::clamp(uv_point.x()) * (image->Width() - 1);

@@ -22,7 +22,6 @@ public:
         if (det > 0) {
             det = std::sqrt(det);
             float t;
-            // printf("sphere intersect b=%.3f det=%.3f delta=%.3f\n", b, det, b - det);
             if (((t = b - det) >= tmin || (t = b + det) >= tmin) && h.getT() > t) {
                 h = Hit(t, static_cast<Object3D *>(this), r.pointAtParameter(t) - center);
                 return true;

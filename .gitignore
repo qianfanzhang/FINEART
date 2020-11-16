@@ -39,7 +39,7 @@ deps/vecmath/Makefile
 deps/vecmath/cmake_install.cmake
 
 # Outputs
-output/
+output*/
 
 # VSCode
 .vscode/

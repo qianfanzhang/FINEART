@@ -21,7 +21,7 @@ public:
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
             if (t >= tmin && h.getT() > t) {
-                h = Hit(t, static_cast<Object3D *>(this), normal);
+                h = Hit(t, static_cast<Object3D *>(this), v < 0 ? normal : -normal);
                 return true;
             }
         }
@@ -35,6 +35,7 @@ public:
     }
 
 protected:
+    // equation: normal.x = d
     Vector3f normal;
     float d;
 

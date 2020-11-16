@@ -19,9 +19,10 @@ public:
     Transform() {}
     Transform(const Matrix4f &m, Object3D *obj) : o(obj) {
         transform = m.inverse();
-        // material = obj->getMaterial();
     }
-    ~Transform() {}
+    ~Transform() {
+        delete o;
+    }
 
     Material *getMaterial() const override {
         return o->getMaterial();

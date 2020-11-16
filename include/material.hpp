@@ -16,27 +16,30 @@ enum MaterialType {
 
 class Material {
 public:
-    explicit Material(const Vector3f &emission, MaterialType type, Texture &&texture)
-        : emission(emission), type(type), texture(std::move(texture)) {}
+    Material(MaterialType type, Texture *texture)
+        : type(type), texture(texture), emission(Vector3f::ZERO) {}
+
+    Material(MaterialType type, Texture *texture, Vector3f emission)
+        : type(type), texture(texture), emission(emission) {}
 
     virtual ~Material() = default;
-
-    const Vector3f &getEmission() const {
-        return emission;
-    }
 
     MaterialType getType() const {
         return type;
     }
 
-    const Texture &getTexture() const {
+    Texture *getTexture() const {
         return texture;
     }
 
+    const Vector3f &getEmission() const {
+        return emission;
+    }
+
 protected:
-    Vector3f emission;
     MaterialType type;
-    Texture texture;
+    Texture *texture;
+    Vector3f emission;
 };
 
 #endif

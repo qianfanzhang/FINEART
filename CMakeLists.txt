@@ -16,8 +16,8 @@ SET(RT_SOURCES
         src/image.cpp
         src/main.cpp
         src/mesh.cpp
-        src/path_tracing.cpp
-        src/scene_parser.cpp)
+        src/path_tracer.cpp
+        src/scene.cpp)
 
 SET(RT_INCLUDES
         include/camera.hpp
@@ -28,10 +28,10 @@ SET(RT_INCLUDES
         include/mesh.hpp
         include/object3d.hpp
         include/plane.hpp
-        include/path_tracing.hpp
+        include/path_tracer.hpp
         include/random.hpp
         include/ray.hpp
-        include/scene_parser.hpp
+        include/scene.hpp
         include/sphere.hpp
         include/utils.hpp
         include/texture.hpp
@@ -49,4 +49,3 @@ find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
-

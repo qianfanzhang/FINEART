@@ -11,11 +11,10 @@ class Group : public Object3D {
 public:
     Group() {}
 
-    explicit Group(int num_objects) {
-        objects.resize(num_objects);
+    ~Group() override {
+        for (auto obj : objects)
+            delete obj;
     }
-
-    ~Group() override {}
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         bool result = false;
@@ -24,8 +23,8 @@ public:
         return result;
     }
 
-    void addObject(int index, Object3D *obj) {
-        objects[index] = obj;
+    void addObject(Object3D *obj) {
+        objects.push_back(obj);
     }
 
     int getGroupSize() const {

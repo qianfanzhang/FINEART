@@ -1,17 +1,16 @@
-#ifndef MY_PATH_TRACING_H
-#define MY_PATH_TRACING_H
+#ifndef MY_PATH_TRACER_H
+#define MY_PATH_TRACER_H
 
 #include "group.hpp"
 #include "random.hpp"
 #include "ray.hpp"
 #include "vecmath.h"
 
-class PathTracing {
+class PathTracer {
 public:
-    PathTracing(Group *group, const Vector3f &background_color, int max_depth, RandomGenerator &gen)
+    PathTracer(Group *group, const Vector3f &background_color, RandomGenerator &gen)
         : group(group),
           background_color(background_color),
-          max_depth(max_depth),
           gen(gen) {}
 
     Vector3f getRadiance(const Ray &ray, int depth = 1);
@@ -19,8 +18,11 @@ public:
 private:
     Group *group;
     Vector3f background_color;
-    int max_depth;
     RandomGenerator &gen;
+
+    static const int MIN_DEPTH = 5;
+    static const int MAX_DEPTH = 13;
+    static const int FULL_REFR_DEPTH = 2;
 };
 
 #endif

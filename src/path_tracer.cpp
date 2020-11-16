@@ -1,12 +1,11 @@
-#include "path_tracing.hpp"
+#include "path_tracer.hpp"
 #include "hit.hpp"
 #include "object3d.hpp"
 #include "random.hpp"
 #include "vecmath.h"
 
-Vector3f PathTracing::getRadiance(const Ray &ray, int depth) {
-    //printf("getRadiance(%d)\n", depth);
-    if (depth > max_depth)
+Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
+    if (depth > MAX_DEPTH)
         return this->background_color;
 
     Hit hit;
@@ -15,19 +14,19 @@ Vector3f PathTracing::getRadiance(const Ray &ray, int depth) {
         return this->background_color;
 
     Vector3f point = ray.pointAtParameter(hit.getT());
-    const Vector3f &direction = ray.getDirection();
-    const Vector3f &normal = hit.getNormal();
+    Vector3f direction = ray.getDirection();
+    Vector3f normal = hit.getNormal();
     Vector3f normal0 = Vector3f::dot(direction, normal) < 0 ? normal : -normal;
     Object3D *object = hit.getObject3D();
     Material *material = object->getMaterial();
-    const Vector3f &emission = material->getEmission();
+    Vector3f emission = material->getEmission();
     Vector3f color = object->getColor(point);
 
     assert(object != nullptr);
     assert(material != nullptr);
 
     float max_color = std::max(color.x(), std::max(color.y(), color.z()));
-    if (depth >= 5) {
+    if (depth >= MIN_DEPTH) {
         if (gen.uniform() < max_color)
             color = color / max_color;
         else
@@ -65,19 +64,16 @@ Vector3f PathTracing::getRadiance(const Ray &ray, int depth) {
         float c = 1 - (into ? -ddn : Vector3f::dot(refr_d, normal));
         float Re = R0 + (1 - R0) * c * c * c * c * c;
         float Tr = 1 - Re;
-        if (depth > 2) {
+        if (depth > FULL_REFR_DEPTH) {
             float P = 0.25 + 0.5 * Re;
             float RP = Re / P;
             float TP = Tr / (1 - P);
             if (gen.uniform() < P)
                 return emission + getRadiance(refl_ray, depth + 1) * RP;
-            else {
-                //printf("REFR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            else
                 return emission + getRadiance(refr_ray, depth + 1) * TP;
-            }
         } else {
             Vector3f ret = emission + getRadiance(refl_ray, depth + 1) * Re;
-            //printf("REFR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             return ret + getRadiance(refr_ray, depth + 1) * Tr;
         }
 
