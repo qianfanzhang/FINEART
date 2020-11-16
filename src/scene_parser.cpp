@@ -1,18 +1,18 @@
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-
+#include "scene_parser.hpp"
 #include "camera.hpp"
 #include "group.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
 #include "object3d.hpp"
 #include "plane.hpp"
-#include "scene_parser.hpp"
 #include "sphere.hpp"
 #include "transform.hpp"
 #include "triangle.hpp"
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <utility>
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 
@@ -160,29 +160,29 @@ Material *SceneParser::parseMaterial() {
     char token[MAX_PARSER_TOKEN_LENGTH];
     char filename[MAX_PARSER_TOKEN_LENGTH];
     filename[0] = 0;
-    Vector3f color(1, 1, 1);
     Vector3f emission(0, 0, 0);
     MaterialType type = DIFFUSE;
+    Texture texture;
     getToken(token);
     assert(!strcmp(token, "{"));
     while (true) {
         getToken(token);
         if (strcmp(token, "color") == 0) {
-            color = readVector3f();
+            Vector3f color = readVector3f();
+            texture.setColor(color);
         } else if (strcmp(token, "emission") == 0) {
             emission = readVector3f();
         } else if (strcmp(token, "type") == 0) {
             type = (MaterialType)readInt();
         } else if (strcmp(token, "texture") == 0) {
-            // TODO: texture
-            abort();
             getToken(filename);
+            texture.loadImage(filename);
         } else {
             assert(!strcmp(token, "}"));
             break;
         }
     }
-    auto *answer = new Material(color, emission, type);
+    auto *answer = new Material(emission, type, std::move(texture));
     return answer;
 }
 
@@ -277,18 +277,24 @@ Sphere *SceneParser::parseSphere() {
 }
 
 Plane *SceneParser::parsePlane() {
+    assert(current_material != nullptr);
+
     char token[MAX_PARSER_TOKEN_LENGTH];
+
     getToken(token);
     assert(!strcmp(token, "{"));
+
     getToken(token);
     assert(!strcmp(token, "normal"));
     Vector3f normal = readVector3f();
+
     getToken(token);
     assert(!strcmp(token, "offset"));
     float offset = readFloat();
+
     getToken(token);
     assert(!strcmp(token, "}"));
-    assert(current_material != nullptr);
+
     return new Plane(normal, offset, current_material);
 }
 
@@ -406,12 +412,22 @@ int SceneParser::getToken(char token[MAX_PARSER_TOKEN_LENGTH]) {
     return 1;
 }
 
+Vector2f SceneParser::readVector2f() {
+    float x, y;
+    int count = fscanf(file, "%f %f", &x, &y);
+    if (count != 2) {
+        printf("Error trying to read 2 floats to make a Vector3f\n");
+        abort();
+    }
+    return Vector2f(x, y);
+}
+
 Vector3f SceneParser::readVector3f() {
     float x, y, z;
     int count = fscanf(file, "%f %f %f", &x, &y, &z);
     if (count != 3) {
         printf("Error trying to read 3 floats to make a Vector3f\n");
-        assert(0);
+        abort();
     }
     return Vector3f(x, y, z);
 }
@@ -421,7 +437,7 @@ float SceneParser::readFloat() {
     int count = fscanf(file, "%f", &answer);
     if (count != 1) {
         printf("Error trying to read 1 float\n");
-        assert(0);
+        abort();
     }
     return answer;
 }
@@ -431,7 +447,7 @@ int SceneParser::readInt() {
     int count = fscanf(file, "%d", &answer);
     if (count != 1) {
         printf("Error trying to read 1 int\n");
-        assert(0);
+        abort();
     }
     return answer;
 }

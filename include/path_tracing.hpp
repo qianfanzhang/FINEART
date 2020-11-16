@@ -1,9 +1,10 @@
-#ifndef _PATH_TRACING
-#define _PATH_TRACING
+#ifndef MY_PATH_TRACING_H
+#define MY_PATH_TRACING_H
 
-#include "ray.hpp"
 #include "group.hpp"
 #include "random.hpp"
+#include "ray.hpp"
+#include "vecmath.h"
 
 class PathTracing {
 public:

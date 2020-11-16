@@ -1,25 +1,42 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#ifndef MY_MATERIAL_H
+#define MY_MATERIAL_H
 
-#include "hit.hpp"
 #include "ray.hpp"
-#include <vecmath.h>
+#include "texture.hpp"
+#include "vecmath.h"
 #include <cassert>
 #include <iostream>
+#include <utility>
 
 enum MaterialType {
-    DIFFUSE, SPECULAR, REFRACTIVE
+    DIFFUSE,
+    SPECULAR,
+    REFRACTIVE
 };
 
 class Material {
 public:
-    Vector3f color;
+    explicit Material(const Vector3f &emission, MaterialType type, Texture &&texture)
+        : emission(emission), type(type), texture(std::move(texture)) {}
+
+    virtual ~Material() = default;
+
+    const Vector3f &getEmission() const {
+        return emission;
+    }
+
+    MaterialType getType() const {
+        return type;
+    }
+
+    const Texture &getTexture() const {
+        return texture;
+    }
+
+protected:
     Vector3f emission;
     MaterialType type;
-
-    explicit Material(const Vector3f &color, const Vector3f &emission, MaterialType type)
-        : color(color), emission(emission), type(type) {}
-    virtual ~Material() = default;
+    Texture texture;
 };
 
 #endif

@@ -1,8 +1,8 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef MY_IMAGE_H
+#define MY_IMAGE_H
 
+#include "vecmath.h"
 #include <cassert>
-#include <vecmath.h>
 
 // Simple image class
 class Image {

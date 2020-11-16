@@ -1,13 +1,13 @@
-#ifndef _MY_FUCKING_RANDOM_H_NOT_YOUR_FUCKING_STD_RANDOM
-#define _MY_FUCKING_RANDOM_H_NOT_YOUR_FUCKING_STD_RANDOM
+#ifndef MY_FUCKING_RANDOM_H_NOT_YOUR_FUCKING_STD_RANDOM
+#define MY_FUCKING_RANDOM_H_NOT_YOUR_FUCKING_STD_RANDOM
 
+#include "utils.hpp"
+#include "vecmath.h"
 #include <cassert>
 #include <cmath>
-#include <random>
 #include <numbers>
+#include <random>
 #include <vector>
-#include <omp.h>
-#include <vecmath.h>
 
 class RandomGenerator {
     std::default_random_engine e;
@@ -31,11 +31,11 @@ public:
     }
 
     inline Vector3f uniformOnHemisphere(const Vector3f &w) {
-        Vector3f u = Vector3f::cross(std::abs(w.x()) > 0.1 ? Vector3f(0, 1, 0) : Vector3f(1, 0, 0), w).normalized();
-        Vector3f v = Vector3f::cross(w, u);
+        Vector3f u = Utils::getUAxisGivenNormal(w);
+        Vector3f v = Utils::getVAxisGivenNormal(w, u);
         float theta = 2 * std::numbers::pi * uniform();
         float r2 = uniform(), r = std::sqrt(r2); // length projected on uv-plane
-        Vector3f d =  (u * std::cos(theta) * r + v * std::sin(theta) * r + w * std::sqrt(1 - r2)).normalized();
+        Vector3f d = (u * std::cos(theta) * r + v * std::sin(theta) * r + w * std::sqrt(1 - r2)).normalized();
         return d;
     }
 };

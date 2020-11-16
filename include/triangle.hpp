@@ -1,18 +1,21 @@
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#ifndef MY_TRIANGLE_H
+#define MY_TRIANGLE_H
 
 #include "object3d.hpp"
+#include "vecmath.h"
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
-#include <vecmath.h>
 
 class Triangle : public Object3D {
 public:
     Triangle() = delete;
+
     Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, Material *m)
         : Object3D(m), a(a), b(b), c(c) {
         normal = Vector3f::cross(b - a, c - a).normalized();
     }
+
     Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, Material *m, const Vector3f &n)
         : Object3D(m), a(a), b(b), c(c), normal(n) {
         normal = Vector3f::cross(b - a, c - a).normalized();
@@ -31,7 +34,7 @@ public:
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
             if (t >= tmin && h.getT() > t && inside2d(r.pointAtParameter(t))) {
-                h = Hit(t, material, normal);
+                h = Hit(t, static_cast<Object3D *>(this), normal);
                 return true;
             }
         }

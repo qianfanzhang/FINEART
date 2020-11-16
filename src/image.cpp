@@ -1,8 +1,9 @@
+#include "image.hpp"
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-
-#include "image.hpp"
+#include <filesystem>
 
 // some helper functions for save & load
 
@@ -78,6 +79,7 @@ Image *Image::LoadTGA(const char *filename) {
     assert(filename != NULL);
     // must end in .tga
     const char *ext = &filename[strlen(filename) - 4];
+    assert(std::filesystem::exists(filename));
     assert(!strcmp(ext, ".tga"));
     FILE *file = fopen(filename, "rb");
     // misc header information
@@ -100,8 +102,9 @@ Image *Image::LoadTGA(const char *filename) {
             assert(tmp == 24);
         else if (i == 17)
             assert(tmp == 32);
-        else
-            assert(tmp == 0);
+        else {
+        }
+        //assert(tmp == 0);
     }
     // the data
     Image *answer = new Image(width, height);

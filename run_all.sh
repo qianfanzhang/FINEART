@@ -16,7 +16,8 @@ cd ..
 # Run all testcases.
 # You can comment some lines to disable the run of specific examples.
 mkdir -p output
-bin/RT testcases/scene01_basic.txt output/scene01.bmp 5000
+# bin/RT testcases/earth.txt output/earth.bmp 1000
+bin/RT testcases/scene01_basic.txt output/scene01.bmp 10000
 # bin/RT testcases/scene02_cube.txt output/scene02.bmp 100
 # bin/RT testcases/scene03_sphere.txt output/scene03.bmp 100
 # bin/RT testcases/scene04_axes.txt output/scene04.bmp 100

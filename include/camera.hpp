@@ -1,10 +1,10 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef MY_CAMERA_H
+#define MY_CAMERA_H
 
 #include "ray.hpp"
+#include "vecmath.h"
 #include <cmath>
 #include <float.h>
-#include <vecmath.h>
 
 class Camera {
 public:

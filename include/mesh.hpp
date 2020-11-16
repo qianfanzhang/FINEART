@@ -1,10 +1,9 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef MY_MESH_H
+#define MY_MESH_H
 
-#include "Vector2f.h"
-#include "Vector3f.h"
 #include "object3d.hpp"
 #include "triangle.hpp"
+#include "vecmath.h"
 #include <vector>
 
 class Mesh : public Object3D {
@@ -22,10 +21,11 @@ public:
         int x[3]{};
     };
 
+    bool intersect(const Ray &r, Hit &h, float tmin) override;
+
     std::vector<Vector3f> v;
     std::vector<TriangleIndex> t;
     std::vector<Vector3f> n;
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
 
 private:
     // Normal can be used for light estimation

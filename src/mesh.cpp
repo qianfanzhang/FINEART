@@ -11,7 +11,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
     bool result = false;
     for (int triId = 0; triId < t.size(); ++triId) {
         TriangleIndex &triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], material, n[triId]);
+        Triangle triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], getMaterial(), n[triId]);
         result |= triangle.intersect(r, h, tmin);
     }
     return result;

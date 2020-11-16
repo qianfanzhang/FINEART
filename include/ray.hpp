@@ -1,8 +1,7 @@
-#ifndef RAY_H
-#define RAY_H
+#ifndef MY_RAY_H
+#define MY_RAY_H
 
-#include <Vector3f.h>
-#include <cassert>
+#include "vecmath.h"
 #include <iostream>
 
 // Ray class mostly copied from Peter Shirley and Keith Morley

@@ -1,5 +1,5 @@
-#ifndef GROUP_H
-#define GROUP_H
+#ifndef MY_GROUP_H
+#define MY_GROUP_H
 
 #include "hit.hpp"
 #include "object3d.hpp"
@@ -10,9 +10,11 @@
 class Group : public Object3D {
 public:
     Group() {}
+
     explicit Group(int num_objects) {
         objects.resize(num_objects);
     }
+
     ~Group() override {}
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {

@@ -1,9 +1,9 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "image.hpp"
-#include "scene_parser.hpp"
 #include "path_tracing.hpp"
 #include "random.hpp"
+#include "scene_parser.hpp"
 #include <cassert>
 #include <cmath>
 #include <cstdio>
@@ -11,6 +11,10 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+
+const size_t MAX_SIZE = 2048;
+
+Vector3f color_map[MAX_SIZE][MAX_SIZE];
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
@@ -28,22 +32,33 @@ int main(int argc, char *argv[]) {
     Vector3f background_color = parser.getBackgroundColor();
     std::random_device rd;
 
-#pragma omp parallel for schedule(dynamic, 1)
-    for (int x = 0; x < camera->getWidth(); ++x) {
-        RandomGenerator gen(rd());
-        PathTracing pt(group, background_color, 6, gen);
-        for (int y = 0; y < camera->getHeight(); ++y) {
-            Vector3f color = Vector3f::ZERO;
-            for (int i = 0; i < numSamples; ++i) {
-                // Ray ray = camera->generateRay(Vector2f(x, y));
-                Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f());
-                color += pt.getRadiance(ray) * (1. / numSamples);
-            }
-            image.SetPixel(x, y, color);
-        }
-    }
+    int iter = 0;
+    while (iter < numSamples) {
+        printf("Iteration %d\n", iter);
+        int n = std::min(numSamples - iter, 100);
 
-    image.SaveImage(outputFile.c_str());
+#pragma omp parallel for schedule(dynamic, 1)
+        for (int x = 0; x < camera->getWidth(); ++x) {
+            RandomGenerator gen(rd());
+            PathTracing pt(group, background_color, 13, gen);
+            for (int y = 0; y < camera->getHeight(); ++y) {
+                Vector3f color = Vector3f::ZERO;
+                for (int i = 0; i < n; ++i) {
+                    Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f());
+                    color += pt.getRadiance(ray);
+                }
+                color_map[x][y] += color;
+            }
+        }
+
+        iter += n;
+        for (int x = 0; x < camera->getWidth(); ++x) {
+            for (int y = 0; y < camera->getHeight(); ++y) {
+                image.SetPixel(x, y, color_map[x][y] / iter);
+            }
+        }
+        image.SaveImage(outputFile.c_str());
+    }
 
     return 0;
 }

@@ -1,8 +1,8 @@
-#ifndef SCENE_PARSER_H
-#define SCENE_PARSER_H
+#ifndef MY_SCENE_PARSER_H
+#define MY_SCENE_PARSER_H
 
+#include "vecmath.h"
 #include <cassert>
-#include <vecmath.h>
 
 class Camera;
 class Material;
@@ -60,6 +60,7 @@ private:
 
     int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
 
+    Vector2f readVector2f();
     Vector3f readVector3f();
 
     float readFloat();

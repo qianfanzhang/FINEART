@@ -1,8 +1,8 @@
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
+#ifndef MY_TRANSFORM_H
+#define MY_TRANSFORM_H
 
 #include "object3d.hpp"
-#include <vecmath.h>
+#include "vecmath.h"
 
 // transforms a 3D point using a matrix, returning a 3D point
 static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
@@ -19,18 +19,29 @@ public:
     Transform() {}
     Transform(const Matrix4f &m, Object3D *obj) : o(obj) {
         transform = m.inverse();
+        // material = obj->getMaterial();
     }
     ~Transform() {}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
+    Material *getMaterial() const override {
+        return o->getMaterial();
+    }
+
+    bool intersect(const Ray &r, Hit &h, float tmin) override {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
         Vector3f trDirection = transformDirection(transform, r.getDirection()).normalized();
         Ray tr(trSource, trDirection);
         if (o->intersect(tr, h, tmin)) {
-            h.set(h.getT(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized());
+            // must override Object3D*
+            h.set(h.getT(), this, transformDirection(transform.transposed(), h.getNormal()).normalized());
             return true;
         }
         return false;
+    }
+
+    Vector2f getUVPoint(const Vector3f &point) const override {
+        Vector3f transformed_point = transformPoint(transform, point);
+        return o->getUVPoint(transformed_point);
     }
 
 protected:

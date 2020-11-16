@@ -1,28 +1,29 @@
-#ifndef HIT_H
-#define HIT_H
+#ifndef MY_HIT_H
+#define MY_HIT_H
 
 #include "ray.hpp"
-#include <vecmath.h>
+#include "vecmath.h"
 
+class Object3D;
 class Material;
 
 class Hit {
 public:
     // constructors
     Hit() {
-        material = nullptr;
         t = 1e38;
+        object = nullptr;
     }
 
-    Hit(float _t, Material *m, const Vector3f &n) {
-        t = _t;
-        material = m;
-        normal = n.normalized();
+    Hit(float t, Object3D *object, const Vector3f &normal) {
+        this->t = t;
+        this->object = object;
+        this->normal = normal.normalized();
     }
 
     Hit(const Hit &h) {
         t = h.t;
-        material = h.material;
+        object = h.object;
         normal = h.normal;
     }
 
@@ -33,23 +34,23 @@ public:
         return t;
     }
 
-    Material *getMaterial() const {
-        return material;
+    Object3D *getObject3D() const {
+        return object;
     }
 
     const Vector3f &getNormal() const {
         return normal;
     }
 
-    void set(float _t, Material *m, const Vector3f &n) {
-        t = _t;
-        material = m;
-        normal = n;
+    void set(float t, Object3D *object, const Vector3f &normal) {
+        this->t = t;
+        this->object = object;
+        this->normal = normal;
     }
 
 private:
     float t;
-    Material *material;
+    Object3D *object;
     Vector3f normal;
 };
 
@@ -58,4 +59,4 @@ inline std::ostream &operator<<(std::ostream &os, const Hit &h) {
     return os;
 }
 
-#endif // HIT_H
+#endif
