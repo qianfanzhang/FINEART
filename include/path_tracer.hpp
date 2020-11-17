@@ -20,8 +20,8 @@ private:
     Vector3f background_color;
     RandomGenerator &gen;
 
-    static const int MIN_DEPTH = 5;
-    static const int MAX_DEPTH = 13;
+    static const int MIN_DEPTH = 4;
+    static const int MAX_DEPTH = 10;
     static const int FULL_REFR_DEPTH = 2;
 };
 

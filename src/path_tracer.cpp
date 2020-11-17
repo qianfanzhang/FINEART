@@ -39,12 +39,12 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
         return emission + color * getRadiance(next_ray, depth + 1);
 
     } else if (material->getType() == SPECULAR) {
-        Vector3f next_d = direction - 2 * Vector3f::dot(normal, direction) * normal;
+        Vector3f next_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
         Ray next_ray(point, next_d);
         return emission + color * getRadiance(next_ray, depth + 1);
 
     } else if (material->getType() == REFRACTIVE) {
-        Vector3f refl_d = direction - 2 * Vector3f::dot(normal, direction) * normal;
+        Vector3f refl_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
         Ray refl_ray(point, refl_d);
         bool into = Vector3f::dot(normal, normal0) > 0;
         float nc = 1, nt = 1.5;

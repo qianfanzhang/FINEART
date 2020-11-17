@@ -18,6 +18,7 @@ public:
     virtual ~Object3D() = default;
 
     virtual Material *getMaterial() const {
+        assert(material != nullptr);
         return material;
     }
 

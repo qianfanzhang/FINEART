@@ -19,13 +19,15 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         Vector3f oc = center - r.getOrigin();
+        float a = r.getDirection().squaredLength();
         float b = Vector3f::dot(oc, r.getDirection());
-        float det = b * b - oc.squaredLength() + radius * radius;
+        float det = b * b - (oc.squaredLength() - radius * radius) * a;
+
         if (det > 0) {
             det = std::sqrt(det);
             float t;
-            if (((t = b - det) >= tmin || (t = b + det) >= tmin) && h.getT() > t) {
-                h = Hit(t, static_cast<Object3D *>(this), r.pointAtParameter(t) - center);
+            if (((t = (b - det) / a) >= tmin || (t = (b + det) / a) >= tmin) && h.getT() > t) {
+                h = Hit(t, this, r.pointAtParameter(t) - center);
                 return true;
             }
         }

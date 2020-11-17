@@ -71,7 +71,7 @@ public:
     Ray generateRay(const Vector2f &point, RandomGenerator &gen) override {
         Vector3f blur = rotation * Vector3f(len_radius * gen.uniformInDisk(), 0);
         Vector3f d((point - offset) / focal_length, 1);
-        return Ray(center + blur, focus_dist * (rotation * d) - blur);
+        return Ray(center + blur, (focus_dist * (rotation * d) - blur).normalized());
     }
 
 protected:

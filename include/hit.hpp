@@ -18,7 +18,7 @@ public:
     Hit(float t, Object3D *object, const Vector3f &normal) {
         this->t = t;
         this->object = object;
-        this->normal = normal.normalized();
+        this->normal = normal;
     }
 
     Hit(const Hit &h) {

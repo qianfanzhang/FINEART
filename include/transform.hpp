@@ -5,12 +5,12 @@
 #include "vecmath.h"
 
 // transforms a 3D point using a matrix, returning a 3D point
-static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
+static inline Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
     return (mat * Vector4f(point, 1)).xyz();
 }
 
 // transform a 3D directino using a matrix, returning a direction
-static Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
+static inline Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
     return (mat * Vector4f(dir, 0)).xyz();
 }
 
@@ -30,10 +30,9 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
-        Vector3f trDirection = transformDirection(transform, r.getDirection()).normalized();
+        Vector3f trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
         if (o->intersect(tr, h, tmin)) {
-            // must override Object3D*
             h.set(h.getT(), this, transformDirection(transform.transposed(), h.getNormal()).normalized());
             return true;
         }
