@@ -21,23 +21,31 @@ public:
         normal = Vector3f::cross(b - a, c - a).normalized();
     }
 
-    bool inside2d(const Vector3f &p) {
-        Vector3f pa = a - p;
-        Vector3f pb = b - p;
-        Vector3f pc = c - p;
-        return Vector3f::dot(Vector3f::cross(pa, pb), normal) >= 0 && Vector3f::dot(Vector3f::cross(pb, pc), normal) >= 0 && Vector3f::dot(Vector3f::cross(pc, pa), normal) >= 0;
-    }
-
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        float v = Vector3f::dot(normal, r.getDirection());
-        float d = Vector3f::dot(normal, a);
-        if (v != 0) {
-            float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
-            if (t >= tmin && h.getT() > t && inside2d(r.pointAtParameter(t))) {
-                h = Hit(t, static_cast<Object3D *>(this), normal);
-                return true;
-            }
+        const float EPS = 1e-4;
+        Vector3f ab = b - a;
+        Vector3f ac = c - a;
+        Vector3f p = Vector3f::cross(r.getDirection(), ac);
+        float det = Vector3f::dot(ab, p);
+        if (det < EPS)
+            return false;
+
+        float invDet = 1 / det;
+        Vector3f tv = r.getOrigin() - a;
+        float u = Vector3f::dot(tv, p) * invDet;
+        if (u < 0 || u > 1)
+            return false;
+        Vector3f q = Vector3f::cross(tv, ab);
+        float v = Vector3f::dot(r.getDirection(), q) * invDet;
+        if (v < 0 || u + v > 1)
+            return false;
+
+        float t = Vector3f::dot(ac, q) * invDet;
+        if (t >= tmin && t < h.getT()) {
+            h = Hit(t, static_cast<Object3D *>(this), normal);
+            return true;
         }
+
         return false;
     }
 

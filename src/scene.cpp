@@ -33,15 +33,15 @@ Scene::Scene(const std::string &scene_name) {
             rad(30),       // angle
             0.25,          // aperture
             8.5,           // focus dist
-            1000,          // width
-            1000           // height
+            500,           // width
+            500            // height
         );
 
         background_color = vec(0, 0, 0);
 
         Texture *white = add(new Texture(vec(1, 1, 1)));
         Texture *red = add(new Texture(vec(0.75, 0.25, 0.25)));
-        Texture *green = add(new Texture(vec(0.25, 0.75, 0.75)));
+        Texture *green = add(new Texture(vec(0.25, 0.75, 0.25)));
         Texture *blue = add(new Texture(vec(0.25, 0.25, 0.75)));
         Texture *grey = add(new Texture(vec(0.5, 0.5, 0.5)));
         Texture *earth = add(new Texture("texture/earth.tga"));
@@ -54,6 +54,7 @@ Scene::Scene(const std::string &scene_name) {
         Material *light_blue = add(new Material(DIFFUSE, blue, vec(0, 0, 3)));
         Material *diff_white = add(new Material(DIFFUSE, white));
         Material *diff_red = add(new Material(DIFFUSE, red));
+        Material *diff_green = add(new Material(DIFFUSE, green));
         Material *diff_blue = add(new Material(DIFFUSE, blue));
         Material *diff_grey = add(new Material(DIFFUSE, grey));
         Material *diff_earth = add(new Material(DIFFUSE, earth));
@@ -76,8 +77,8 @@ Scene::Scene(const std::string &scene_name) {
         group->addObject(new Plane(vec(0, 1, 0), 2, diff_grey));
         group->addObject(new Plane(vec(1, 0, 0), -2, diff_red));
         group->addObject(new Plane(vec(1, 0, 0), 2, diff_blue));
-        // group->addObject(new Transform(Matrix4f::translation(-1.5, -2, 1.2) * Matrix4f::rotateZ(0.5) * Matrix4f::rotateY(1.57),
-        //                                new Mesh("mesh/rectangle.obj", spec)));
+        group->addObject(new Transform(Matrix4f::translation(1, -1.5, 1.5) * Matrix4f::rotateY(0.1),
+                                       new Mesh("mesh/rectangle.obj", diff_green)));
     } else {
         abort();
     }
