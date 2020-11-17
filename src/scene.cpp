@@ -26,19 +26,22 @@ float rad(float deg) {
 
 Scene::Scene(const std::string &scene_name) {
     if (scene_name == "01_earth_in_box") {
-        camera = new PerspectiveCamera(
+        camera = new ThinLenCamera(
             vec(0, 0, 10), // center
             vec(0, 0, -1), // direction
             vec(0, 1, 0),  // up
-            300,           // width
-            300,           // height
-            rad(30)        // angle
+            rad(30),       // angle
+            0.25,          // aperture
+            8.5,           // focus dist
+            1000,          // width
+            1000           // height
         );
 
         background_color = vec(0, 0, 0);
 
         Texture *white = add(new Texture(vec(1, 1, 1)));
         Texture *red = add(new Texture(vec(0.75, 0.25, 0.25)));
+        Texture *green = add(new Texture(vec(0.25, 0.75, 0.75)));
         Texture *blue = add(new Texture(vec(0.25, 0.25, 0.75)));
         Texture *grey = add(new Texture(vec(0.5, 0.5, 0.5)));
         Texture *earth = add(new Texture("texture/earth.tga"));
@@ -46,6 +49,9 @@ Scene::Scene(const std::string &scene_name) {
         Texture *marble = add(new Texture("texture/marble.tga"));
 
         Material *light = add(new Material(DIFFUSE, white, vec(15, 15, 15)));
+        Material *light_red = add(new Material(DIFFUSE, red, vec(3, 0, 0)));
+        Material *light_green = add(new Material(DIFFUSE, green, vec(0, 3, 0)));
+        Material *light_blue = add(new Material(DIFFUSE, blue, vec(0, 0, 3)));
         Material *diff_white = add(new Material(DIFFUSE, white));
         Material *diff_red = add(new Material(DIFFUSE, red));
         Material *diff_blue = add(new Material(DIFFUSE, blue));
@@ -57,9 +63,14 @@ Scene::Scene(const std::string &scene_name) {
         group = new Group();
 
         group->addObject(new Sphere(vec(0, 3.5, 0.75), 1.82, light));
+        group->addObject(new Sphere(vec(-1.6, 0, -1.6), 0.2, light_red));
+        group->addObject(new Sphere(vec(-1.1, 0, -1.3), 0.2, light_green));
+        group->addObject(new Sphere(vec(-0.6, 0, -1.0), 0.2, light_blue));
+
         group->addObject(new Transform(Mat4::translation(0.2, -1, -0.75) * Mat4::rotateY(2.61) * Mat4::rotateX(-1.57),
                                        new Sphere(vec(0, 0, 0), 0.75, diff_earth)));
         group->addObject(new Sphere(vec(-0.75, -0.6, 1.5), 0.6, refr));
+
         group->addObject(new Plane(vec(0, 0, 1), -2, diff_grey));
         group->addObject(new Plane(vec(0, 1, 0), -2, diff_grey));
         group->addObject(new Plane(vec(0, 1, 0), 2, diff_grey));

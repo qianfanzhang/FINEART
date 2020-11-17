@@ -30,7 +30,16 @@ public:
         return Vector2f(tent(), tent());
     }
 
-    inline Vector3f uniformOnHemisphere(const Vector3f &w) {
+    Vector2f uniformInDisk() {
+        for (;;) {
+            Vector2f p(uniform() * 2 - 1, uniform() * 2 - 1);
+            if (p.absSquared() >= 1)
+                continue;
+            return p;
+        }
+    }
+
+    Vector3f uniformOnHemisphere(const Vector3f &w) {
         Vector3f u = Utils::getUAxisGivenNormal(w);
         Vector3f v = Utils::getVAxisGivenNormal(w, u);
         float theta = 2 * std::numbers::pi * uniform();

@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     if (argc != 3)
         return 1;
     std::string scene_name = argv[1];
-    std::string output_prefix = "output/" + scene_name + "_";
+    std::string output_prefix = "output/" + scene_name;
     int num_samples = std::stoi(argv[2]);
 
     Scene world(scene_name);
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
             for (int y = 0; y < camera->getHeight(); ++y) {
                 Vector3f color = Vector3f::ZERO;
                 for (int i = 0; i < n; ++i) {
-                    Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f());
+                    Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f(), gen);
                     color += pt.getRadiance(ray);
                 }
                 color_map[x][y] += color;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        std::string output_file = output_prefix + std::to_string(iter) + ".bmp";
+        std::string output_file = output_prefix + ".bmp";
         image.SaveImage(output_file.c_str());
     }
 
