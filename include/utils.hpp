@@ -8,6 +8,7 @@
 
 namespace Utils {
 
+constexpr float pi = 3.1415926536f;
 constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
 
 inline constexpr float gamma(int n) {

@@ -1,4 +1,5 @@
 #include "group/kd_tree.hpp"
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <stack>

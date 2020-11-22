@@ -23,7 +23,7 @@ Vector3f vec(float x, float y, float z) {
 }
 
 float rad(float deg) {
-    return deg / 180 * std::numbers::pi;
+    return deg / 180 * Utils::pi;
 }
 
 // The new objects will NOT be deleted until the program exists

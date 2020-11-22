@@ -5,7 +5,6 @@
 #include "vecmath.h"
 #include <cassert>
 #include <cmath>
-#include <numbers>
 #include <random>
 #include <vector>
 
@@ -42,7 +41,7 @@ public:
     Vector3f uniformOnHemisphere(const Vector3f &w) {
         Vector3f u = Utils::getUAxisGivenNormal(w);
         Vector3f v = Utils::getVAxisGivenNormal(w, u);
-        float theta = 2 * std::numbers::pi * uniform();
+        float theta = 2 * Utils::pi * uniform();
         float r2 = uniform(), r = std::sqrt(r2); // length projected on uv-plane
         Vector3f d = (u * std::cos(theta) * r + v * std::sin(theta) * r + w * std::sqrt(1 - r2)).normalized();
         return d;
