@@ -7,7 +7,6 @@
 #include "vecmath.h"
 #include <cmath>
 #include <cstdlib>
-#include <numbers>
 
 class Sphere : public Object3D {
 public:
