@@ -10,7 +10,6 @@
 #include "object/plane.hpp"
 #include "object/sphere.hpp"
 #include "vecmath.h"
-#include <numbers>
 
 using Mat4 = Matrix4f;
 
