@@ -9,7 +9,6 @@ class Material;
 
 class Hit {
 public:
-    // constructors
     Hit() {
         t = 1e38;
         object = nullptr;
@@ -27,11 +26,14 @@ public:
         normal = h.normal;
     }
 
-    // destructor
     ~Hit() = default;
 
     float getT() const {
         return t;
+    }
+
+    void setT(float new_t) {
+        t = new_t;
     }
 
     Object3D *getObject3D() const {

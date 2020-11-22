@@ -1,12 +1,14 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 #include "scene.hpp"
 #include "camera.hpp"
-#include "group.hpp"
+#include "group/basic_group.hpp"
+#include "group/kd_tree.hpp"
 #include "material.hpp"
-#include "mesh.hpp"
-#include "plane.hpp"
-#include "sphere.hpp"
-#include "transform.hpp"
-#include "triangle.hpp"
+#include "object/mesh.hpp"
+#include "object/plane.hpp"
+#include "object/sphere.hpp"
 #include "vecmath.h"
 #include <numbers>
 
@@ -24,17 +26,21 @@ float rad(float deg) {
     return deg / 180 * std::numbers::pi;
 }
 
+// The new objects will NOT be deleted until the program exists
+
 Scene::Scene(const std::string &scene_name) {
     if (scene_name == "01_earth_in_box") {
+        group = new KdTree();
+
         camera = new ThinLenCamera(
-            vec(0, 0, 10), // center
-            vec(0, 0, -1), // direction
-            vec(0, 1, 0),  // up
-            rad(30),       // angle
-            0.25,          // aperture
-            8.5,           // focus dist
-            500,           // width
-            500            // height
+            vec(0, 0.7, 4),   // center
+            vec(0, -0.4, -1), // direction
+            vec(0, 1, 0),     // up
+            rad(50),          // angle
+            0,                // aperture
+            8.5,              // focus dist
+            1000,             // width
+            1000              // height
         );
 
         background_color = vec(0, 0, 0);
@@ -60,26 +66,34 @@ Scene::Scene(const std::string &scene_name) {
         Material *diff_earth = add(new Material(DIFFUSE, earth));
         Material *spec = add(new Material(SPECULAR, white));
         Material *refr = add(new Material(REFRACTIVE, white));
+        Material *refr_red = add(new Material(REFRACTIVE, red));
+        Material *refr_green = add(new Material(REFRACTIVE, green));
 
-        group = new Group();
+        group->add(new Sphere(vec(0, 3.5, 0.75), 1.82, light));
+        // group->add(new Sphere(vec(-1.6, 0, -1.6), 0.2, light_red));
+        // group->add(new Sphere(vec(-1.1, 0, -1.3), 0.2, light_green));
+        // group->add(new Sphere(vec(-0.6, 0, -1.0), 0.2, light_blue));
 
-        group->addObject(new Sphere(vec(0, 3.5, 0.75), 1.82, light));
-        group->addObject(new Sphere(vec(-1.6, 0, -1.6), 0.2, light_red));
-        group->addObject(new Sphere(vec(-1.1, 0, -1.3), 0.2, light_green));
-        group->addObject(new Sphere(vec(-0.6, 0, -1.0), 0.2, light_blue));
+        // group->add(new Transform(Mat4::translation(0.2, -1, -0.75) * Mat4::rotateY(2.61) * Mat4::rotateX(-1.57),
+        //                                new Sphere(vec(0, 0, 0), 0.75, diff_earth)));
+        // group->add(new Sphere(vec(-0.75, -0.6, 1.5), 0.6, refr));
 
-        group->addObject(new Transform(Mat4::translation(0.2, -1, -0.75) * Mat4::rotateY(2.61) * Mat4::rotateX(-1.57),
-                                       new Sphere(vec(0, 0, 0), 0.75, diff_earth)));
-        group->addObject(new Sphere(vec(-0.75, -0.6, 1.5), 0.6, refr));
+        group->add(new Plane(vec(0, 0, 1), -2, diff_grey));
+        group->add(new Plane(vec(0, 1, 0), -2, diff_grey));
+        group->add(new Plane(vec(0, 1, 0), 2, diff_grey));
+        group->add(new Plane(vec(1, 0, 0), -2, diff_red));
+        group->add(new Plane(vec(1, 0, 0), 2, diff_blue));
+        group->add(new Mesh("mesh/fixed.perfect.dragon.100K.obj", refr_green, Matrix4f::translation(0.5, -1.35, 1.1) * Matrix4f::uniformScaling(1.5)));
+        group->add(new Mesh("mesh/bunny.fine.obj", diff_red, Matrix4f::translation(-0.5, -2.35, -0.5) * Matrix4f::uniformScaling(10)));
+        group->add(new Plane(vec(0, 1, 0), -0.7, refr));
 
-        group->addObject(new Plane(vec(0, 0, 1), -2, diff_grey));
-        group->addObject(new Plane(vec(0, 1, 0), -2, diff_grey));
-        group->addObject(new Plane(vec(0, 1, 0), 2, diff_grey));
-        group->addObject(new Plane(vec(1, 0, 0), -2, diff_red));
-        group->addObject(new Plane(vec(1, 0, 0), 2, diff_blue));
-        group->addObject(new Transform(Matrix4f::translation(1, -1.5, 1.5) * Matrix4f::rotateY(0.1),
-                                       new Mesh("mesh/rectangle.obj", diff_green)));
     } else {
         abort();
     }
+
+    group->build();
+    // group->debug();
+    // fflush(stdout);
 }
+
+#pragma GCC diagnostic pop

@@ -1,5 +1,5 @@
 #include "camera.hpp"
-#include "group.hpp"
+#include "group/group.hpp"
 #include "image.hpp"
 #include "path_tracer.hpp"
 #include "random.hpp"

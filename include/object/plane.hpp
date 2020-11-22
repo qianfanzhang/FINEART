@@ -1,6 +1,7 @@
 #ifndef MY_PLANE_H
 #define MY_PLANE_H
 
+#include "bounding_box.hpp"
 #include "object3d.hpp"
 #include "vecmath.h"
 #include <cmath>
@@ -16,12 +17,16 @@ public:
         v_axis = Utils::getVAxisGivenNormal(this->normal, u_axis);
     }
 
+    BoundingBox getBoundingBox() const {
+        return BoundingBox();
+    }
+
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         float v = Vector3f::dot(normal, r.getDirection());
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
             if (t >= tmin && h.getT() > t) {
-                h = Hit(t, this, v < 0 ? normal : -normal);
+                h.set(t, this, v < 0 ? normal : -normal);
                 return true;
             }
         }
@@ -32,6 +37,12 @@ public:
         float u = Utils::fmodp(Vector3f::dot(point, u_axis), 1);
         float v = Utils::fmodp(Vector3f::dot(point, v_axis), 1);
         return Vector2f(u, v);
+    }
+
+    std::string getString() const override {
+        char buff[100];
+        snprintf(buff, sizeof(buff), "Plane((%.2f,%.2f,%.2f),%.2f)", normal.x(), normal.y(), normal.z(), d);
+        return buff;
     }
 
 protected:

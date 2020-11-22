@@ -16,27 +16,29 @@ SET(RT_SOURCES
         src/image.cpp
         src/main.cpp
         src/mesh.cpp
+        src/kd_tree.cpp
         src/path_tracer.cpp
         src/scene.cpp)
 
 SET(RT_INCLUDES
+        include/group/group.hpp
+        include/group/basic_group.hpp
+        include/group/kd_tree.hpp
+        include/object/mesh.hpp
+        include/object/object3d.hpp
+        include/object/plane.hpp
+        include/object/sphere.hpp
         include/camera.hpp
-        include/group.hpp
+        include/bounding_box.hpp
         include/hit.hpp
         include/image.hpp
         include/material.hpp
-        include/mesh.hpp
-        include/object3d.hpp
-        include/plane.hpp
         include/path_tracer.hpp
         include/random.hpp
         include/ray.hpp
         include/scene.hpp
-        include/sphere.hpp
         include/utils.hpp
-        include/texture.hpp
-        include/transform.hpp
-        include/triangle.hpp)
+        include/texture.hpp)
 
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)

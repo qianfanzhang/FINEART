@@ -2,7 +2,7 @@
 #define MY_SCENE_H
 
 #include "camera.hpp"
-#include "group.hpp"
+#include "group/basic_group.hpp"
 #include "material.hpp"
 #include "texture.hpp"
 #include "vecmath.h"

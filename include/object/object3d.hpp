@@ -1,11 +1,15 @@
 #ifndef MY_OBJECT3D_H
 #define MY_OBJECT3D_H
 
+#include "bounding_box.hpp"
 #include "hit.hpp"
 #include "material.hpp"
 #include "ray.hpp"
 #include "vecmath.h"
+#include <cstdio>
 #include <cstdlib>
+#include <string>
+#include <vector>
 
 // Base class for all 3d entities.
 class Object3D {
@@ -22,7 +26,12 @@ public:
         return material;
     }
 
-    // Intersect Ray with this object. If hit, store information in hit structure.
+    virtual std::vector<Object3D *> getBasicObjects() {
+        return {this};
+    }
+
+    virtual BoundingBox getBoundingBox() const = 0;
+
     virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
 
     virtual const Vector3f &getColor(const Vector3f &point) const {
@@ -34,8 +43,13 @@ public:
     }
 
     virtual Vector2f getUVPoint(const Vector3f &point __attribute__((unused))) const {
-        // not implemented
         abort();
+    }
+
+    virtual std::string getString() const {
+        char buff[100];
+        snprintf(buff, sizeof(buff), "Object3D()");
+        return buff;
     }
 
 private:

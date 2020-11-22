@@ -4,8 +4,15 @@
 #include "vecmath.h"
 #include <cassert>
 #include <cmath>
+#include <limits>
 
 namespace Utils {
+
+constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
+
+inline constexpr float gamma(int n) {
+    return (n * MACHINE_EPS) / (1 - n * MACHINE_EPS);
+}
 
 inline float clamp(float x) {
     return x < 0 ? 0 : (x < 1 ? x : 1);
@@ -24,6 +31,14 @@ inline Vector3f getUAxisGivenNormal(const Vector3f &normal) {
 
 inline Vector3f getVAxisGivenNormal(const Vector3f &normal, const Vector3f &u) {
     return Vector3f::cross(normal, u);
+}
+
+inline Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
+    return (mat * Vector4f(point, 1)).xyz();
+}
+
+inline Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
+    return (mat * Vector4f(dir, 0)).xyz();
 }
 
 } // namespace Utils

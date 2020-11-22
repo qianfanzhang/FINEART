@@ -1,6 +1,7 @@
 #ifndef MY_SPHERE_H
 #define MY_SPHERE_H
 
+#include "bounding_box.hpp"
 #include "hit.hpp"
 #include "object3d.hpp"
 #include "vecmath.h"
@@ -27,7 +28,7 @@ public:
             det = std::sqrt(det);
             float t;
             if (((t = (b - det) / a) >= tmin || (t = (b + det) / a) >= tmin) && h.getT() > t) {
-                h = Hit(t, this, r.pointAtParameter(t) - center);
+                h.set(t, this, r.pointAtParameter(t) - center);
                 return true;
             }
         }
@@ -41,6 +42,17 @@ public:
         float u = 0.5 + phi / (2 * std::numbers::pi);
         float v = 0.5 + theta / std::numbers::pi;
         return Vector2f(u, v);
+    }
+
+    BoundingBox getBoundingBox() const override {
+        return BoundingBox(center - Vector3f(radius, radius, radius),
+                           center + Vector3f(radius, radius, radius));
+    }
+
+    std::string getString() const override {
+        char buff[100];
+        snprintf(buff, sizeof(buff), "Sphere((%.2f,%.2f,%.2f),%.2f)", center.x(), center.y(), center.z(), radius);
+        return buff;
     }
 
 private:

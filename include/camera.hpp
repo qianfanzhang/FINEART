@@ -48,7 +48,7 @@ public:
         rotation = Matrix3f(this->horizontal, this->up, this->direction);
     }
 
-    Ray generateRay(const Vector2f &point, RandomGenerator &gen) override {
+    Ray generateRay(const Vector2f &point, RandomGenerator &gen __attribute__((unused))) override {
         Vector3f d((point - offset) / focal_length, 1);
         return Ray(center, (rotation * d).normalized());
     }

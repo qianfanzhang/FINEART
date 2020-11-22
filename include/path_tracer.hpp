@@ -1,7 +1,7 @@
 #ifndef MY_PATH_TRACER_H
 #define MY_PATH_TRACER_H
 
-#include "group.hpp"
+#include "group/group.hpp"
 #include "random.hpp"
 #include "ray.hpp"
 #include "vecmath.h"
@@ -19,10 +19,6 @@ private:
     Group *group;
     Vector3f background_color;
     RandomGenerator &gen;
-
-    static const int MIN_DEPTH = 4;
-    static const int MAX_DEPTH = 10;
-    static const int FULL_REFR_DEPTH = 2;
 };
 
 #endif

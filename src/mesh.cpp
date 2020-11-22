@@ -1,4 +1,6 @@
-#include "mesh.hpp"
+#include "object/mesh.hpp"
+#include "utils.hpp"
+#include "vecmath.h"
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
@@ -6,19 +8,51 @@
 #include <sstream>
 #include <utility>
 
+static const float EPS = 1e-6;
+
+bool Triangle::intersect(const Ray &r, Hit &h, float tmin) {
+    Vector3f ab = mesh->v[v[1]] - mesh->v[v[0]];
+    Vector3f ac = mesh->v[v[2]] - mesh->v[v[0]];
+    Vector3f p = Vector3f::cross(r.getDirection(), ac);
+    float det = Vector3f::dot(ab, p);
+    if (std::abs(det) < EPS)
+        return -1;
+
+    float invDet = 1 / det;
+    Vector3f tv = r.getOrigin() - mesh->v[v[0]];
+    float u = Vector3f::dot(tv, p) * invDet;
+    if (u < 0 || u > 1)
+        return -1;
+    Vector3f q = Vector3f::cross(tv, ab);
+    float v = Vector3f::dot(r.getDirection(), q) * invDet;
+    if (v < 0 || u + v > 1)
+        return -1;
+
+    float t = Vector3f::dot(ac, q) * invDet;
+    if (t >= tmin && t < h.getT()) {
+        h.set(t, this, mesh->n[id]);
+        return true;
+    }
+    return false;
+}
+
+std::vector<Object3D *> Mesh::getBasicObjects() {
+    std::vector<Object3D *> objs;
+    for (auto &triangle : t)
+        objs.push_back(&triangle);
+    return objs;
+}
+
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
-    // Optional: Change this brute force method into a faster one.
     bool result = false;
     for (int triId = 0; triId < t.size(); ++triId) {
-        TriangleIndex &triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], getMaterial(), n[triId]);
+        Triangle &triangle = t[triId];
         result |= triangle.intersect(r, h, tmin);
     }
     return result;
 }
 
-Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
-    // Optional: Use tiny obj loader to replace this simple one.
+Mesh::Mesh(const char *filename, Material *material, Matrix4f transform) : Object3D(material) {
     std::ifstream f;
     f.open(filename);
     if (!f.is_open()) {
@@ -48,12 +82,12 @@ Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
         if (tok == vTok) {
             Vector3f vec;
             ss >> vec[0] >> vec[1] >> vec[2];
-            v.push_back(vec);
+            v.push_back(Utils::transformPoint(transform, vec));
         } else if (tok == fTok) {
             if (line.find(bslash) != std::string::npos) {
                 std::replace(line.begin(), line.end(), bslash, space);
                 std::stringstream facess(line);
-                TriangleIndex trig;
+                Triangle trig(this);
                 facess >> tok;
                 for (int ii = 0; ii < 3; ii++) {
                     facess >> trig[ii] >> texID;
@@ -61,7 +95,7 @@ Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
                 }
                 t.push_back(trig);
             } else {
-                TriangleIndex trig;
+                Triangle trig(this);
                 for (int ii = 0; ii < 3; ii++) {
                     ss >> trig[ii];
                     trig[ii]--;
@@ -74,17 +108,14 @@ Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
             ss >> texcoord[1];
         }
     }
-    computeNormal();
-
     f.close();
-}
 
-void Mesh::computeNormal() {
     n.resize(t.size());
     for (int triId = 0; triId < (int)t.size(); ++triId) {
-        TriangleIndex &triIndex = t[triId];
-        Vector3f a = v[triIndex[1]] - v[triIndex[0]];
-        Vector3f b = v[triIndex[2]] - v[triIndex[0]];
+        Triangle &triangle = t[triId];
+        Vector3f a = v[triangle[1]] - v[triangle[0]];
+        Vector3f b = v[triangle[2]] - v[triangle[0]];
         n[triId] = Vector3f::cross(a, b).normalized();
+        triangle.id = triId;
     }
 }

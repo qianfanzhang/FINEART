@@ -1,15 +1,19 @@
 #include "path_tracer.hpp"
 #include "hit.hpp"
-#include "object3d.hpp"
+#include "object/object3d.hpp"
 #include "random.hpp"
 #include "vecmath.h"
+
+static const int MIN_DEPTH = 4;
+static const int MAX_DEPTH = 10;
+static const int FULL_REFR_DEPTH = 2;
 
 Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
     if (depth > MAX_DEPTH)
         return this->background_color;
 
     Hit hit;
-    bool has_intersection = this->group->intersect(ray, hit, 1e-4);
+    bool has_intersection = this->group->intersect(ray, hit);
     if (!has_intersection)
         return this->background_color;
 
@@ -54,7 +58,7 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
 
         // total internal reflection
         if (cos2t < 0)
-            return emission + getRadiance(refl_ray, depth + 1);
+            return emission + color * getRadiance(refl_ray, depth + 1);
 
         // otherwise, choose reflection or refraction
         Vector3f refr_d = (nnt * direction - normal * ((into ? 1 : -1) * (ddn * nnt + std::sqrt(cos2t)))).normalized();
@@ -69,12 +73,11 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
             float RP = Re / P;
             float TP = Tr / (1 - P);
             if (gen.uniform() < P)
-                return emission + getRadiance(refl_ray, depth + 1) * RP;
+                return emission + color * getRadiance(refl_ray, depth + 1) * RP;
             else
-                return emission + getRadiance(refr_ray, depth + 1) * TP;
+                return emission + color * getRadiance(refr_ray, depth + 1) * TP;
         } else {
-            Vector3f ret = emission + getRadiance(refl_ray, depth + 1) * Re;
-            return ret + getRadiance(refr_ray, depth + 1) * Tr;
+            return emission + color * getRadiance(refl_ray, depth + 1) * Re + color * getRadiance(refr_ray, depth + 1) * Tr;
         }
 
     } else
