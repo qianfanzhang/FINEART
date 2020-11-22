@@ -18,13 +18,14 @@ const int MAX_SIZE = 2048;
 Vector3f color_map[MAX_SIZE][MAX_SIZE];
 
 int main(int argc, char *argv[]) {
-    if (argc != 3)
+    if (argc != 4)
         return 1;
     std::string scene_name = argv[1];
     std::string output_prefix = "output/" + scene_name;
     int num_samples = std::stoi(argv[2]);
+    int resolution = std::stoi(argv[3]);
 
-    Scene world(scene_name);
+    Scene world(scene_name, resolution);
     Camera *camera = world.getCamera();
     Group *group = world.getGroup();
     Image image(camera->getWidth(), camera->getHeight());

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 num_samples=$1
+resolution=$2
 
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then
@@ -18,4 +19,4 @@ cd ..
 # Run all testcases.
 # You can comment some lines to disable the run of specific examples.
 mkdir -p output
-bin/BINART 01_earth_in_box $num_samples
+bin/BINART 01_earth_in_box $num_samples $resolution

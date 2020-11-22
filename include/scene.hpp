@@ -11,7 +11,7 @@
 
 class Scene {
 public:
-    Scene(const std::string &scene_name);
+    Scene(const std::string &scene_name, int resolution);
 
     ~Scene() {
         delete camera;
