@@ -18,4 +18,4 @@ cd ..
 # Run all testcases.
 # You can comment some lines to disable the run of specific examples.
 mkdir -p output
-bin/RT 01_earth_in_box $num_samples
+bin/BINART 01_earth_in_box $num_samples

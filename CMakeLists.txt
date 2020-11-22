@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(RT CXX)
+PROJECT(BINART CXX)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release)
@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 ADD_SUBDIRECTORY(deps/vecmath)
 
-SET(RT_SOURCES
+SET(BINART_SOURCES
         src/image.cpp
         src/main.cpp
         src/mesh.cpp
@@ -20,7 +20,7 @@ SET(RT_SOURCES
         src/path_tracer.cpp
         src/scene.cpp)
 
-SET(RT_INCLUDES
+SET(BINART_INCLUDES
         include/group/group.hpp
         include/group/basic_group.hpp
         include/group/kd_tree.hpp
@@ -43,7 +43,7 @@ SET(RT_INCLUDES
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${RT_SOURCES} ${RT_INCLUDES})
+ADD_EXECUTABLE(${PROJECT_NAME} ${BINART_SOURCES} ${BINART_INCLUDES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE vecmath)
 TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PRIVATE include)
 
