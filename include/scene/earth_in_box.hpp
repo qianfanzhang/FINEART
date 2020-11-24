@@ -1,0 +1,17 @@
+camera = new ThinLenCamera(vec(0, 0.4, 7), vec(0, -0.17, -1), vec(0, 1, 0),
+                           rad(40), 0, 4.8, resolution, resolution);
+
+group->add(new Sphere(vec(0, 3.5, 0.75), 1.82, light));
+
+group->add(new Sphere(vec(-1, 0.4, -1), 0.5, diff_earth));
+group->add(new Sphere(vec(-1, -1, 1), 0.5, diff_earth));
+
+group->add(new Sphere(vec(1.3, -0.5, -1.3), 0.5, spec));
+group->add(new Sphere(vec(0.75, -1, 1.5), 0.7, refr));
+
+group->add(new Plane(vec(0, 0, 1), -2, diff_grey));
+group->add(new Plane(vec(0, 0, 1), -7.1, diff_grey));
+group->add(new Plane(vec(0, 1, 0), -2, diff_grey));
+group->add(new Plane(vec(0, 1, 0), 2, diff_grey));
+group->add(new Plane(vec(1, 0, 0), -2, diff_red));
+group->add(new Plane(vec(1, 0, 0), 2, diff_blue));

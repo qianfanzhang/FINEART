@@ -5,6 +5,7 @@
 #include "random.hpp"
 #include "scene.hpp"
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -18,8 +19,13 @@ const int MAX_SIZE = 2048;
 Vector3f color_map[MAX_SIZE][MAX_SIZE];
 
 int main(int argc, char *argv[]) {
-    if (argc != 4)
-        return 1;
+    auto program_start = std::chrono::system_clock::now();
+    std::cout << "[main] BINART start" << std::endl;
+
+    if (argc != 4) {
+        throw std::invalid_argument("too few arguments");
+    }
+
     std::string scene_name = argv[1];
     std::string output_prefix = "output/" + scene_name;
     int num_samples = std::stoi(argv[2]);
@@ -32,9 +38,13 @@ int main(int argc, char *argv[]) {
     Vector3f background_color = world.getBackgroundColor();
     std::random_device rd;
 
+    std::cout << "[main] start rendering " << scene_name << " with sample=" << num_samples << ", resolution=" << resolution << std::endl;
+    PathTracer::debug();
+
     int iter = 0;
     while (iter < num_samples) {
-        printf("Running iteration %d\n", iter);
+        auto iteration_start = std::chrono::system_clock::now();
+
         int n = std::min(num_samples - iter, STEP_SIZE);
 
 #pragma omp parallel for schedule(dynamic, 1)
@@ -60,7 +70,16 @@ int main(int argc, char *argv[]) {
 
         std::string output_file = output_prefix + ".png";
         image.save(output_file.c_str());
+
+        auto iteration_end = std::chrono::system_clock::now();
+        std::chrono::duration<double> diff = iteration_end - iteration_start;
+        std::cout << "[main] finished iteration " << iter << "/" << num_samples << " in " << diff.count() << " s "
+                  << "(" << diff.count() / n << " s/sample, eta " << (num_samples - iter) * diff.count() / n / 60 << " min)" << std::endl;
     }
+
+    auto program_end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = program_end - program_start;
+    std::cout << "[main] BINART ended in " << diff.count() / 60 << " min" << std::endl;
 
     return 0;
 }

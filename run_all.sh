@@ -1,22 +1,16 @@
 #!/usr/bin/env bash
 
+./build.sh || exit 1
+
 num_samples=$1
 resolution=$2
 
-# If project not ready, generate cmake file.
-if [[ ! -d build ]]; then
-    mkdir -p build
-    cd build
-    cmake ..
-    cd ..
-fi
+run() {
+    echo
+    scene_name=$1
+    bin/BINART $scene_name $num_samples $resolution 2>&1 | tee output/$scene_name.log
+}
 
-# Build project.
-cd build
-make -j || exit 1
-cd ..
-
-# Run all testcases.
-# You can comment some lines to disable the run of specific examples.
-mkdir -p output
-bin/BINART 01_earth_in_box $num_samples $resolution
+run earth_in_box
+run dragon_in_box
+run girl_in_box

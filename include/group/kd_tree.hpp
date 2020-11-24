@@ -74,6 +74,10 @@ private:
     int max_leaf_objects;
     int max_giveup_size;
     BoundingBox world_bound;
+
+    int sum_leaf_size;
+    int total_internals;
+    int total_leafs;
 };
 
 #endif

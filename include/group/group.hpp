@@ -26,7 +26,7 @@ public:
         return intersect(r, h, TMIN);
     }
 
-    virtual void debug() {}
+    virtual void debug() = 0;
 
 protected:
     std::vector<Object3D *> objects;

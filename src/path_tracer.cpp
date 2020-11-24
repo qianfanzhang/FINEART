@@ -3,10 +3,7 @@
 #include "object/object3d.hpp"
 #include "random.hpp"
 #include "vecmath.h"
-
-static const int MIN_DEPTH = 4;
-static const int MAX_DEPTH = 10;
-static const int FULL_REFR_DEPTH = 2;
+#include <iostream>
 
 Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
     if (depth > MAX_DEPTH)

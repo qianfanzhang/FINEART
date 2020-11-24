@@ -27,10 +27,16 @@ void KdTree::build() {
     i_cost = 80;
     t_cost = 1;
 
+    sum_leaf_size = 0;
+    total_internals = 0;
+    total_leafs = 0;
+
     std::vector<int> init_indicies;
     for (int i = 0; i < objects.size(); ++i) {
         init_indicies.push_back(i);
     }
+
+    nodes.clear();
     buildTree(world_bound, init_indicies, 0);
 }
 
@@ -47,6 +53,8 @@ void KdTree::buildTree(const BoundingBox &bound, const std::vector<int> &indicie
     nodes.push_back(KdTreeNode());
     if (indicies.size() <= max_leaf_objects || depth >= max_depth) {
         nodes[id].initLeaf(indicies, indicies_pool);
+        sum_leaf_size += indicies.size();
+        ++total_leafs;
         return;
     }
 
@@ -100,6 +108,8 @@ void KdTree::buildTree(const BoundingBox &bound, const std::vector<int> &indicie
 
     if (best_axis == -1 || (best_cost > 4 * old_cost && indicies.size() < max_giveup_size)) {
         nodes[id].initLeaf(indicies, indicies_pool);
+        sum_leaf_size += indicies.size();
+        ++total_leafs;
         return;
     }
 
@@ -118,6 +128,7 @@ void KdTree::buildTree(const BoundingBox &bound, const std::vector<int> &indicie
     buildTree(bound0, new_indicies, depth + 1);
 
     nodes[id].initInterior(best_axis, t, nodes.size());
+    ++total_internals;
 
     new_indicies.clear();
     for (int i = best_offset; i < lines[best_axis].size(); ++i) {
@@ -207,7 +218,10 @@ bool KdTree::intersect_good(const Ray &r, Hit &h, float tmin) {
 }
 
 void KdTree::debug() {
-    debugTree(0);
+    std::cout << "[KdTree] object=" << objects.size() << ", node=" << nodes.size()
+              << ", internal=" << total_internals << ", leaf=" << total_leafs << " (" << (double)sum_leaf_size / total_leafs << " obj/leaf)" << std::endl;
+
+    // debugTree(0);
 }
 
 void KdTree::debugTree(int id) {

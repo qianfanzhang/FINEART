@@ -2,6 +2,7 @@
 #define MY_BASIC_GROUP_H
 
 #include "group.hpp"
+#include <iostream>
 
 class BasicGroup : public Group {
 public:
@@ -12,6 +13,10 @@ public:
         for (auto &obj : objects)
             result |= obj->intersect(r, h, tmin);
         return result;
+    }
+
+    void debug() override {
+        std::cout << "[BasicGroup] object=" << objects.size() << std::endl;
     }
 };
 
