@@ -26,14 +26,15 @@ public:
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
             if (t >= tmin && h.getT() > t) {
-                h.set(t, this, v < 0 ? normal : -normal);
+                const Vector3f &p = r.pointAtParameter(t);
+                h.set(t, this, getUVPoint(p), v < 0 ? normal : -normal);
                 return true;
             }
         }
         return false;
     }
 
-    Vector2f getUVPoint(const Vector3f &point) const {
+    Vector2f getUVPoint(const Vector3f &point) const override {
         float u = Utils::fmodp(Vector3f::dot(point, u_axis), 1);
         float v = Utils::fmodp(Vector3f::dot(point, v_axis), 1);
         return Vector2f(u, v);

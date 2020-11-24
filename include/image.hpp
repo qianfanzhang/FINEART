@@ -3,62 +3,53 @@
 
 #include "vecmath.h"
 #include <cassert>
+#include <png++/png.hpp>
+#include <string>
 
-// Simple image class
 class Image {
 public:
-    Image(int w, int h) {
-        width = w;
-        height = h;
-        data = new Vector3f[width * height];
+    Image(std::string filename) : image(filename) {}
+
+    Image(int w, int h) : image(w, h) {}
+
+    int width() const {
+        return image.get_width();
     }
 
-    ~Image() {
-        delete[] data;
+    int height() const {
+        return image.get_height();
     }
 
-    int Width() const {
-        return width;
+    Vector3f get(int x, int y) const {
+        assert(x >= 0 && x < image.get_width());
+        assert(y >= 0 && y < image.get_height());
+        png::rgb_pixel pixel = image.get_pixel(x, height() - y - 1);
+        // printf("%.3f %.3f %.3f\n", pixel.red / 255.f, pixel.green / 255.f, pixel.blue / 255.f);
+        return Vector3f(pixel.red / 255.f, pixel.green / 255.f, pixel.blue / 255.f);
     }
 
-    int Height() const {
-        return height;
+    void set(int x, int y, const Vector3f &color) {
+        assert(x >= 0 && x < image.get_width());
+        assert(y >= 0 && y < image.get_height());
+        png::rgb_pixel pixel(clamp(color.x()), clamp(color.y()), clamp(color.z()));
+        image.set_pixel(x, height() - y - 1, pixel);
     }
 
-    const Vector3f &GetPixel(int x, int y) const {
-        assert(x >= 0 && x < width);
-        assert(y >= 0 && y < height);
-        return data[y * width + x];
+    void save(std::string filename) {
+        image.write(filename);
     }
-
-    void SetAllPixels(const Vector3f &color) {
-        for (int i = 0; i < width * height; ++i) {
-            data[i] = color;
-        }
-    }
-
-    void SetPixel(int x, int y, const Vector3f &color) {
-        assert(x >= 0 && x < width);
-        assert(y >= 0 && y < height);
-        data[y * width + x] = color;
-    }
-
-    static Image *LoadPPM(const char *filename);
-
-    void SavePPM(const char *filename) const;
-
-    static Image *LoadTGA(const char *filename);
-
-    void SaveTGA(const char *filename) const;
-
-    int SaveBMP(const char *filename);
-
-    void SaveImage(const char *filename);
 
 private:
-    int width;
-    int height;
-    Vector3f *data;
+    png::image<png::rgb_pixel> image;
+
+    unsigned char clamp(float c) {
+        int tmp = int(c * 255);
+        if (tmp < 0)
+            tmp = 0;
+        if (tmp > 255)
+            tmp = 255;
+        return (unsigned char)tmp;
+    }
 };
 
 #endif

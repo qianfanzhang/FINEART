@@ -32,8 +32,15 @@ public:
         return texture;
     }
 
-    const Vector3f &getEmission() const {
+    Vector3f getEmission() const {
         return emission;
+    }
+
+    Vector3f getColor(const Vector2f &uv) const {
+        if (texture->isConstantColor())
+            return texture->getColor();
+        else
+            return texture->getColor(uv);
     }
 
 protected:

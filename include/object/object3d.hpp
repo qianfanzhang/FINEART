@@ -34,14 +34,6 @@ public:
 
     virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
 
-    virtual const Vector3f &getColor(const Vector3f &point) const {
-        if (getMaterial()->getTexture()->isConstantColor())
-            return getMaterial()->getTexture()->getColor();
-
-        const Vector2f &uv_point = getUVPoint(point);
-        return getMaterial()->getTexture()->getColor(uv_point);
-    }
-
     virtual Vector2f getUVPoint(const Vector3f &point __attribute__((unused))) const {
         abort();
     }

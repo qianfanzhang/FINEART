@@ -10,6 +10,8 @@ namespace Utils {
 
 constexpr float pi = 3.1415926536f;
 constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
+constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
+constexpr float MIN_FLOAT = std::numeric_limits<float>::min();
 
 inline constexpr float gamma(int n) {
     return (n * MACHINE_EPS) / (1 - n * MACHINE_EPS);
@@ -40,6 +42,10 @@ inline Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
 
 inline Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
     return (mat * Vector4f(dir, 0)).xyz();
+}
+
+inline Vector3f transformNormal(const Matrix4f &mat, const Vector3f &dir) {
+    return (mat.inverse().transposed() * Vector4f(dir, 0)).xyz();
 }
 
 } // namespace Utils

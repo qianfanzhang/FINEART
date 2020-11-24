@@ -2,6 +2,7 @@
 #define MY_HIT_H
 
 #include "ray.hpp"
+#include "utils.hpp"
 #include "vecmath.h"
 
 class Object3D;
@@ -14,16 +15,14 @@ public:
         object = nullptr;
     }
 
-    Hit(float t, Object3D *object, const Vector3f &normal) {
-        this->t = t;
-        this->object = object;
-        this->normal = normal;
-    }
+    Hit(float t, Object3D *object, const Vector2f &uv, const Vector3f &normal)
+        : t(t), object(object), uv(uv), normal(normal) {}
 
     Hit(const Hit &h) {
         t = h.t;
         object = h.object;
-        normal = h.normal;
+        uv = h.uv;
+        normal = h.normal.normalized();
     }
 
     ~Hit() = default;
@@ -44,15 +43,21 @@ public:
         return normal;
     }
 
-    void set(float t, Object3D *object, const Vector3f &normal) {
+    const Vector2f &getUV() const {
+        return uv;
+    }
+
+    void set(float t, Object3D *object, const Vector2f &uv, const Vector3f &normal) {
         this->t = t;
         this->object = object;
-        this->normal = normal;
+        this->uv = uv;
+        this->normal = normal.normalized();
     }
 
 private:
     float t;
     Object3D *object;
+    Vector2f uv;
     Vector3f normal;
 };
 

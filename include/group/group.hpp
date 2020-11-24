@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vector>
 
-constexpr float TMIN = 1e-6f;
+constexpr float TMIN = 1e-4f;
 
 class Group {
 public:

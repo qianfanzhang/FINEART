@@ -54,12 +54,12 @@ int main(int argc, char *argv[]) {
         iter += n;
         for (int x = 0; x < camera->getWidth(); ++x) {
             for (int y = 0; y < camera->getHeight(); ++y) {
-                image.SetPixel(x, y, color_map[x][y] / iter);
+                image.set(x, y, color_map[x][y] / iter);
             }
         }
 
-        std::string output_file = output_prefix + ".bmp";
-        image.SaveImage(output_file.c_str());
+        std::string output_file = output_prefix + ".png";
+        image.save(output_file.c_str());
     }
 
     return 0;

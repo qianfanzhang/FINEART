@@ -13,8 +13,8 @@ public:
         this->color = color;
     }
 
-    Texture(const char *image_file) {
-        this->image = Image::LoadTGA(image_file);
+    Texture(const char *filename) {
+        this->image = new Image(filename);
         this->color = Vector3f(1, 1, 1);
     }
 
@@ -31,7 +31,7 @@ public:
 
     void loadImage(const char *filename) {
         assert(image == nullptr);
-        image = Image::LoadTGA(filename);
+        image = new Image(filename);
     }
 
     bool isConstantColor() const {
@@ -42,17 +42,17 @@ public:
         return image != nullptr;
     }
 
-    const Vector3f &getColor() const {
+    Vector3f getColor() const {
         assert(isConstantColor());
         return color;
     }
 
-    const Vector3f &getColor(const Vector2f &uv_point) const {
+    Vector3f getColor(const Vector2f &uv_point) const {
         assert(isImage());
 
-        int x = Utils::clamp(uv_point.x()) * (image->Width() - 1);
-        int y = Utils::clamp(uv_point.y()) * (image->Height() - 1);
-        return image->GetPixel(x, y);
+        int x = Utils::clamp(uv_point.x()) * (image->width() - 1);
+        int y = Utils::clamp(uv_point.y()) * (image->height() - 1);
+        return image->get(x, y);
     }
 
 private:

@@ -16,6 +16,7 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
     bool has_intersection = this->group->intersect(ray, hit);
     if (!has_intersection)
         return this->background_color;
+    assert(hit.getObject3D() != nullptr);
 
     Vector3f point = ray.pointAtParameter(hit.getT());
     Vector3f direction = ray.getDirection();
@@ -24,7 +25,7 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
     Object3D *object = hit.getObject3D();
     Material *material = object->getMaterial();
     Vector3f emission = material->getEmission();
-    Vector3f color = object->getColor(point);
+    Vector3f color = material->getColor(hit.getUV());
 
     assert(object != nullptr);
     assert(material != nullptr);

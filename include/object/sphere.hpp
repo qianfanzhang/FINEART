@@ -27,14 +27,15 @@ public:
             det = std::sqrt(det);
             float t;
             if (((t = (b - det) / a) >= tmin || (t = (b + det) / a) >= tmin) && h.getT() > t) {
-                h.set(t, this, r.pointAtParameter(t) - center);
+                const Vector3f &p = r.pointAtParameter(t);
+                h.set(t, this, getUVPoint(p), p - center);
                 return true;
             }
         }
         return false;
     }
 
-    Vector2f getUVPoint(const Vector3f &point) const {
+    Vector2f getUVPoint(const Vector3f &point) const override {
         Vector3f d = (point - center).normalized();
         float phi = std::atan2(d.y(), d.x());
         float theta = std::asin(d.z());
