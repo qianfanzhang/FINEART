@@ -98,19 +98,36 @@ Mesh::Mesh(const char *filename, Material *material, Matrix4f transform, bool ve
         } else if (tok == fTok) {
             if (line.find(bslash) != std::string::npos) {
                 std::replace(line.begin(), line.end(), bslash, space);
-                std::stringstream facess(line);
+                std::stringstream ss(line);
                 Triangle trig(this);
-                facess >> tok;
+                ss >> tok;
                 for (int ii = 0; ii < 3; ++ii) {
-                    facess >> trig._v[ii] >> trig._uv[ii] >> trig._n[ii];
+                    ss >> trig._v[ii] >> trig._uv[ii] >> trig._n[ii];
                 }
                 t.push_back(trig);
+                Triangle trig2 = trig;
+                ss >> trig2._v[2] >> trig2._uv[2] >> trig2._n[2];
+                if (!ss.fail()) {
+                    t.push_back(trig2);
+                    int tmp;
+                    ss >> tmp;
+                    assert(ss.fail()); // maximum 4 verticies
+                }
+
             } else {
                 Triangle trig(this);
                 for (int ii = 0; ii < 3; ++ii) {
                     ss >> trig[ii];
                 }
                 t.push_back(trig);
+                Triangle trig2 = trig;
+                ss >> trig2._v[2];
+                if (!ss.fail()) {
+                    t.push_back(trig2);
+                    int tmp;
+                    ss >> tmp;
+                    assert(ss.fail()); // maximum 4 verticies
+                }
             }
         } else if (tok == texTok) {
             Vector2f texcoord;
