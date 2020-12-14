@@ -44,9 +44,10 @@ Scene::Scene(const std::string &scene_name, int resolution) {
 #include "scene/dragon_in_box.hpp"
     } else if (scene_name == "girl_in_box") {
 #include "scene/girl_in_box.hpp"
-    } else {
+    } else if (scene_name == "steampunk") {
+#include "scene/steampunk.hpp"
+    } else
         throw std::invalid_argument("scene_name not found");
-    }
 
     assert(camera != nullptr);
 

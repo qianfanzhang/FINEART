@@ -42,3 +42,6 @@ output*/
 
 # VSCode
 .vscode/
+
+# Big obj files
+mesh/

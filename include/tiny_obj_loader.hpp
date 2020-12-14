@@ -313,7 +313,7 @@ class MaterialStreamReader : public MaterialReader {
 /// or not.
 bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
              std::vector<material_t> *materials, std::string *err,
-             const char *filename, const char *mtl_basedir = NULL,
+             const char *filename, const char *mtl_basedir = "mesh/",
              bool triangulate = true);
 
 /// Loads .obj from a file with custom user callback.

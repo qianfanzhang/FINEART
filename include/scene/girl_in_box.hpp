@@ -15,4 +15,4 @@ group->add(new Plane(vec(1, 0, 0), 2, diff_blue));
 
 group->add(new Mesh("mesh/girl.obj", diff_girl,
                     Matrix4f::translation(0, -2, 2) * Matrix4f::rotateX(rad(-90)) * Matrix4f::uniformScaling(0.0017),
-                    false));
+                    true));

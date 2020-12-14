@@ -16,11 +16,11 @@ enum MaterialType {
 
 class Material {
 public:
-    Material(MaterialType type, Texture *texture)
-        : type(type), texture(texture), emission(Vector3f::ZERO) {}
+    Material(MaterialType type, Vector3f diffuse, Vector3f emission = Vector3f::ZERO)
+        : type(type), diffuse(diffuse), emission(emission), texture(nullptr) {}
 
-    Material(MaterialType type, Texture *texture, Vector3f emission)
-        : type(type), texture(texture), emission(emission) {}
+    Material(MaterialType type, Texture *texture)
+        : type(type), diffuse({1, 1, 1}), emission(Vector3f::ZERO), texture(texture) {}
 
     virtual ~Material() = default;
 
@@ -28,25 +28,21 @@ public:
         return type;
     }
 
-    Texture *getTexture() const {
-        return texture;
-    }
-
     Vector3f getEmission() const {
         return emission;
     }
 
     Vector3f getColor(const Vector2f &uv) const {
-        if (texture->isConstantColor())
-            return texture->getColor();
+        if (texture == nullptr)
+            return diffuse;
         else
-            return texture->getColor(uv);
+            return diffuse * texture->getColor(uv);
     }
 
-protected:
     MaterialType type;
-    Texture *texture;
+    Vector3f diffuse;
     Vector3f emission;
+    Texture *texture;
 };
 
 #endif

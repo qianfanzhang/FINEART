@@ -30,20 +30,17 @@ public:
     std::vector<Vector3f> tri_normals;
     std::vector<Vector2f> texcoords;
     std::vector<Vector3f> vec_normals;
+    std::vector<Material> materials;
     bool use_vec_normal;
 };
 
 class Triangle : public Object3D {
 public:
-    Triangle(Mesh *mesh) : mesh(mesh) {
+    Triangle(Material *material, Mesh *mesh) : Object3D(material), mesh(mesh) {
         _v[0] = _v[1] = _v[2] = 0;
         _t[0] = _t[1] = _t[2] = 0;
         _n[0] = _n[1] = _n[2] = 0;
         id = 0;
-    }
-
-    Material *getMaterial() const override {
-        return mesh->getMaterial();
     }
 
     BoundingBox getBoundingBox() const override {

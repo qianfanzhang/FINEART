@@ -50,6 +50,11 @@ private:
         materials.push_back(material);
         return material;
     }
+
+    Object3D *add(Object3D *object) {
+        group->add(object);
+        return object;
+    }
 };
 
 #endif

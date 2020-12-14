@@ -1,16 +1,16 @@
-Texture *white = add(new Texture(vec(1, 1, 1)));
-Texture *red = add(new Texture(vec(0.75, 0.25, 0.25)));
-Texture *green = add(new Texture(vec(0.25, 0.75, 0.25)));
-Texture *blue = add(new Texture(vec(0.25, 0.25, 0.75)));
-Texture *grey = add(new Texture(vec(0.5, 0.5, 0.5)));
+Vector3f white = vec(1, 1, 1);
+Vector3f red = vec(0.75, 0.25, 0.25);
+Vector3f green = vec(0.25, 0.75, 0.25);
+Vector3f blue = vec(0.25, 0.25, 0.75);
+Vector3f grey = vec(0.5, 0.5, 0.5);
 Texture *earth = add(new Texture("texture/earth.png"));
 Texture *wood = add(new Texture("texture/wood.png"));
 Texture *marble = add(new Texture("texture/marble.png"));
 Texture *girl = add(new Texture("texture/girl.png"));
 
 Material *light = add(new Material(DIFFUSE, white, vec(15, 15, 15)));
-Material *light_white = add(new Material(DIFFUSE, red, vec(4, 4, 4)));
-Material *light_white0 = add(new Material(DIFFUSE, red, vec(3, 3, 3)));
+Material *light_white = add(new Material(DIFFUSE, white, vec(4, 4, 4)));
+Material *light_white0 = add(new Material(DIFFUSE, white, vec(0.5, 0.5, 0.5)));
 Material *light_red = add(new Material(DIFFUSE, red, vec(4, 0, 0)));
 Material *light_green = add(new Material(DIFFUSE, green, vec(0, 4, 0)));
 Material *light_blue = add(new Material(DIFFUSE, blue, vec(0, 0, 4)));

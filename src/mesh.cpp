@@ -60,10 +60,10 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
     : Object3D(fallback_material), use_vec_normal(use_vec_normal) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
+    std::vector<tinyobj::material_t> obj_materials;
 
     std::string err_msg;
-    bool load_success = tinyobj::LoadObj(&attrib, &shapes, &materials, &err_msg, filename);
+    bool load_success = tinyobj::LoadObj(&attrib, &shapes, &obj_materials, &err_msg, filename);
 
     if (!err_msg.empty())
         printf("[Mesh] error message: %s\n", err_msg.c_str());
@@ -98,14 +98,20 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
         texcoords[t + 1][1] = attrib.texcoords[2 * t + 1];
     }
 
+    materials.reserve(obj_materials.size());
+    for (auto &m : obj_materials) {
+        Vector3f diffuse = {m.diffuse[0], m.diffuse[1], m.diffuse[2]};
+        materials.push_back(Material(DIFFUSE, diffuse));
+    }
+
     for (auto &shape : shapes) {
         int index_offset = 0;
         for (int f = 0; f < shape.mesh.num_face_vertices.size(); ++f) {
             int fv = shape.mesh.num_face_vertices[f];
+            int mid = shape.mesh.material_ids[f];
             assert(fv == 3);
 
-            // tinyobj::material_t &material = materials[shapes[s].mesh.material_ids[f]];
-            Triangle triangle(this);
+            Triangle triangle(mid == -1 ? fallback_material : &materials[mid], this);
             for (int i = 0; i < fv; ++i) {
                 triangle._v[i] = shape.mesh.indices[index_offset + i].vertex_index + 1;
                 triangle._n[i] = shape.mesh.indices[index_offset + i].normal_index + 1;
