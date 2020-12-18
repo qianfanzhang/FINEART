@@ -44,4 +44,4 @@ output*/
 .vscode/
 
 # Big obj files
-mesh/
+mesh/house.obj

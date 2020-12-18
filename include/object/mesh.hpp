@@ -31,6 +31,7 @@ public:
     std::vector<Vector2f> texcoords;
     std::vector<Vector3f> vec_normals;
     std::vector<Material> materials;
+    std::vector<Texture> textures;
     bool use_vec_normal;
 };
 

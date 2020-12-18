@@ -16,6 +16,9 @@ enum MaterialType {
 
 class Material {
 public:
+    Material()
+        : type(DIFFUSE), diffuse(1, 1, 1), emission(0, 0, 0), texture(nullptr) {}
+
     Material(MaterialType type, Vector3f diffuse, Vector3f emission = Vector3f::ZERO)
         : type(type), diffuse(diffuse), emission(emission), texture(nullptr) {}
 

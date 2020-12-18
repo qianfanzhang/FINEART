@@ -99,9 +99,22 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
     }
 
     materials.reserve(obj_materials.size());
+    textures.reserve(obj_materials.size());
     for (auto &m : obj_materials) {
-        Vector3f diffuse = {m.diffuse[0], m.diffuse[1], m.diffuse[2]};
-        materials.push_back(Material(DIFFUSE, diffuse));
+        Material material;
+        material.diffuse = {m.diffuse[0], m.diffuse[1], m.diffuse[2]};
+
+        if (!m.diffuse_texname.empty()) {
+            textures.emplace_back("texture/" + m.diffuse_texname, Vector3f(m.diffuse_texopt.scale));
+            material.texture = &textures.back();
+        }
+        if (m.dissolve == 1)
+            material.type = DIFFUSE;
+        else
+            material.type = REFRACTIVE;
+        material.emission = Vector3f(m.emission);
+
+        materials.push_back(material);
     }
 
     for (auto &shape : shapes) {
@@ -114,7 +127,7 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
             Triangle triangle(mid == -1 ? fallback_material : &materials[mid], this);
             for (int i = 0; i < fv; ++i) {
                 triangle._v[i] = shape.mesh.indices[index_offset + i].vertex_index + 1;
-                triangle._n[i] = shape.mesh.indices[index_offset + i].normal_index + 1;
+                triangle._n[i] = use_vec_normal ? shape.mesh.indices[index_offset + i].normal_index + 1 : 0;
                 triangle._t[i] = shape.mesh.indices[index_offset + i].texcoord_index + 1;
                 assert(triangle._v[i] >= 0 && triangle._v[i] < verticies.size());
                 assert(triangle._n[i] >= 0 && triangle._n[i] < vec_normals.size());

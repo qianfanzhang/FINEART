@@ -16,6 +16,8 @@ public:
     Vector3f(const Vector2f &xy, float z);
     Vector3f(float x, const Vector2f &yz);
 
+    Vector3f(float buf[3]);
+
     // copy constructors
     Vector3f(const Vector3f &rv);
 

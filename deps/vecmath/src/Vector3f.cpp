@@ -45,6 +45,12 @@ Vector3f::Vector3f(float x, const Vector2f &yz) {
     m_elements[2] = yz.y();
 }
 
+Vector3f::Vector3f(float buf[3]) {
+    m_elements[0] = buf[0];
+    m_elements[1] = buf[1];
+    m_elements[2] = buf[2];
+}
+
 Vector3f::Vector3f(const Vector3f &rv) {
     m_elements[0] = rv[0];
     m_elements[1] = rv[1];

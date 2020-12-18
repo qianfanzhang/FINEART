@@ -12,7 +12,9 @@ mkdir -p output
 num_samples=$1
 resolution=$2
 
+# run earth_in_box
+# run girl_in_box
+# run dragon_in_box
+# run house
+run glass
 # run steampunk
-run earth_in_box
-run girl_in_box
-run dragon_in_box
