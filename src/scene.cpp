@@ -33,6 +33,7 @@ Scene::Scene(const std::string &scene_name, int resolution) {
     std::cout << "[Scene] start building " << scene_name << std::endl;
 
     background_color = vec(0, 0, 0);
+    medium = nullptr;
 
     group = new KdTree();
 
@@ -44,10 +45,12 @@ Scene::Scene(const std::string &scene_name, int resolution) {
 #include "scene/dragon_in_box.hpp"
     } else if (scene_name == "girl_in_box") {
 #include "scene/girl_in_box.hpp"
+    } else if (scene_name == "glass_in_box") {
+#include "scene/glass_in_box.hpp"
+    } else if (scene_name == "sphere_in_box") {
+#include "scene/sphere_in_box.hpp"
     } else if (scene_name == "house") {
 #include "scene/house.hpp"
-    } else if (scene_name == "glass") {
-#include "scene/glass.hpp"
     } else
         throw std::invalid_argument("scene_name not found");
 

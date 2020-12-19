@@ -9,6 +9,7 @@
 namespace Utils {
 
 constexpr float pi = 3.1415926536f;
+constexpr float inv4pi = 1 / (4 * pi);
 constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
 constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
 constexpr float MIN_FLOAT = std::numeric_limits<float>::min();

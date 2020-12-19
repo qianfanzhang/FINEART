@@ -15,13 +15,18 @@ public:
     RandomGenerator(unsigned int seed)
         : e(seed) {}
 
-    double uniform() {
+    float uniform() {
         std::uniform_real_distribution<> dist(0, 1);
         return dist(e);
     }
 
-    double tent() {
-        double r = 2 * uniform();
+    int randint(int l, int r) {
+        std::uniform_int_distribution<> dist(l, r);
+        return dist(e);
+    }
+
+    float tent() {
+        float r = 2 * uniform();
         return r < 1 ? std::sqrt(r) - 1 : 1 - std::sqrt(2 - r);
     }
 
@@ -47,26 +52,28 @@ public:
         return d;
     }
 
-    /*
-    float henyeyGreenstein(const Vector3f &wo, Vector3f *wi) const {
-        // Compute $\cos \theta$ for Henyey--Greenstein sample
-        float cosTheta;
+    // the function is adapt from pbrt-v3, https://github.com/mmp/pbrt-v3/tree/master/src/core/medium.cpp
+    float henyeyGreenstein(const Vector3f &wo, Vector3f &wi, float g) {
+        // compute cos(theta) for Henyey-Greenstein sample
+        float cos_theta;
         if (std::abs(g) < 1e-3)
-            cosTheta = 1 - 2 * u[0];
+            cos_theta = 1 - 2 * uniform();
         else {
-            float sqrTerm = (1 - g * g) / (1 + g - 2 * g * u[0]);
-            cosTheta = -(1 + g * g - sqrTerm * sqrTerm) / (2 * g);
+            float t = (1 - g * g) / (1 + g - 2 * g * uniform());
+            cos_theta = (1 + g * g - t * t) / (2 * g); // FIXME: positive or negative?
         }
 
-        // Compute direction _wi_ for Henyey--Greenstein sample
-        float sinTheta = std::sqrt(std::max((Float)0, 1 - cosTheta * cosTheta));
-        float phi = 2 * Pi * u[1];
-        Vector3f v1, v2;
-        CoordinateSystem(wo, &v1, &v2);
-        *wi = SphericalDirection(sinTheta, cosTheta, phi, v1, v2, wo);
-        return PhaseHG(cosTheta, g);
+        // compute wi for Henyey-Greenstein sample
+        float sin_theta = std::sqrt(std::max((float)0, 1 - cos_theta * cos_theta));
+        float phi = 2 * Utils::pi * uniform();
+        Vector3f u = Utils::getUAxisGivenNormal(wo);
+        Vector3f v = Utils::getVAxisGivenNormal(wo, u);
+        wi = sin_theta * std::cos(phi) * u + sin_theta * std::sin(phi) * v + cos_theta * wo;
+
+        // compute probability density
+        float t = 1 + g * g + 2 * g * cos_theta;
+        return Utils::inv4pi * (1 - g * g) / (t * std::sqrt(t));
     }
-    */
 };
 
 #endif

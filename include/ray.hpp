@@ -30,7 +30,6 @@ public:
         return origin + direction * t;
     }
 
-private:
     Vector3f origin;
     Vector3f direction;
 };

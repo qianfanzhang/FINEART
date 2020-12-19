@@ -5,14 +5,24 @@
 #include "vecmath.h"
 #include <iostream>
 
-Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
+Vector3f PathTracer::getRadiance(Ray ray, int depth) {
     if (depth > MAX_DEPTH)
         return this->background_color;
 
     Hit hit;
+    Vector3f beta(1, 1, 1);
     bool has_intersection = this->group->intersect(ray, hit);
-    if (!has_intersection)
+    bool has_medium_interaction = this->medium != nullptr && this->medium->interact(ray, beta, this->gen, hit.getT());
+
+    if (!has_intersection && !has_medium_interaction)
         return this->background_color;
+    if (has_medium_interaction) {
+        return beta * getRadiance(ray, depth + 1);
+    }
+    assert(beta[0] >= 0 && beta[1] >= 0 && beta[2] >= 0);
+    // if (beta.length() < 1e-3)
+    //    return this->background_color;
+
     assert(hit.getObject3D() != nullptr);
 
     Vector3f point = ray.pointAtParameter(hit.getT());
@@ -32,18 +42,18 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
         if (gen.uniform() < max_color)
             color = color / max_color;
         else
-            return emission;
+            return beta * emission;
     }
 
     if (material->getType() == DIFFUSE) {
         Vector3f next_d = this->gen.uniformOnHemisphere(normal);
         Ray next_ray(point, next_d);
-        return emission + color * getRadiance(next_ray, depth + 1);
+        return beta * (emission + color * getRadiance(next_ray, depth + 1));
 
     } else if (material->getType() == SPECULAR) {
         Vector3f next_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
         Ray next_ray(point, next_d);
-        return emission + color * getRadiance(next_ray, depth + 1);
+        return beta * (emission + color * getRadiance(next_ray, depth + 1));
 
     } else if (material->getType() == REFRACTIVE) {
         Vector3f refl_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
@@ -56,7 +66,7 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
 
         // total internal reflection
         if (cos2t < 0)
-            return emission + color * getRadiance(refl_ray, depth + 1);
+            return beta * (emission + color * getRadiance(refl_ray, depth + 1));
 
         // otherwise, choose reflection or refraction
         Vector3f refr_d = (nnt * direction - normal * ((into ? 1 : -1) * (ddn * nnt + std::sqrt(cos2t)))).normalized();
@@ -71,11 +81,11 @@ Vector3f PathTracer::getRadiance(const Ray &ray, int depth) {
             float RP = Re / P;
             float TP = Tr / (1 - P);
             if (gen.uniform() < P)
-                return emission + color * getRadiance(refl_ray, depth + 1) * RP;
+                return beta * (emission + color * getRadiance(refl_ray, depth + 1) * RP);
             else
-                return emission + color * getRadiance(refr_ray, depth + 1) * TP;
+                return beta * (emission + color * getRadiance(refr_ray, depth + 1) * TP);
         } else {
-            return emission + color * getRadiance(refl_ray, depth + 1) * Re + color * getRadiance(refr_ray, depth + 1) * Tr;
+            return beta * (emission + color * getRadiance(refl_ray, depth + 1) * Re + color * getRadiance(refr_ray, depth + 1) * Tr);
         }
 
     } else

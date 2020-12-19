@@ -4,6 +4,7 @@
 #include "camera.hpp"
 #include "group/basic_group.hpp"
 #include "material.hpp"
+#include "medium.hpp"
 #include "texture.hpp"
 #include "vecmath.h"
 #include <string>
@@ -15,6 +16,8 @@ public:
 
     ~Scene() {
         delete camera;
+        if (medium != nullptr)
+            delete medium;
         delete group;
         for (auto material : materials)
             delete material;
@@ -30,6 +33,10 @@ public:
         return group;
     }
 
+    Medium *getMedium() const {
+        return medium;
+    }
+
     const Vector3f &getBackgroundColor() const {
         return background_color;
     }
@@ -37,6 +44,7 @@ public:
 private:
     Camera *camera;
     Group *group;
+    Medium *medium;
     std::vector<Texture *> textures;
     std::vector<Material *> materials;
     Vector3f background_color;
