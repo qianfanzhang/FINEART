@@ -2,12 +2,11 @@
 #define MY_GROUP_H
 
 #include "hit.hpp"
+#include "light.hpp"
 #include "object/object3d.hpp"
 #include "ray.hpp"
 #include <iostream>
 #include <vector>
-
-constexpr float TMIN = 1e-4f;
 
 class Group {
 public:
@@ -18,18 +17,23 @@ public:
         objects.insert(objects.end(), basic_objects.begin(), basic_objects.end());
     }
 
+    void add(Light *li) {
+        lights.push_back(li);
+    }
+
     virtual void build() {}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
-
     bool intersect(const Ray &r, Hit &h) {
-        return intersect(r, h, TMIN);
+        return intersect(r, h, Hit::T_MIN);
     }
 
     virtual void debug() = 0;
 
 protected:
+    virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
+
     std::vector<Object3D *> objects;
+    std::vector<Light *> lights;
 };
 
 #endif

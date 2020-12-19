@@ -10,10 +10,11 @@ class Material;
 
 class Hit {
 public:
-    static constexpr float MAX_T = 1e30;
+    static constexpr float T_MIN = 1e-4;
+    static constexpr float T_MAX = 1e10;
 
     Hit() {
-        t = MAX_T;
+        t = T_MAX;
         object = nullptr;
     }
 
