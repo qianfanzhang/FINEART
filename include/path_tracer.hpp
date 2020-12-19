@@ -9,10 +9,9 @@
 
 class PathTracer {
 public:
-    PathTracer(Group *group, Medium *medium, const Vector3f &background_color, RandomGenerator &gen)
+    PathTracer(Group *group, Medium *medium, RandomGenerator &gen)
         : group(group),
           medium(medium),
-          background_color(background_color),
           gen(gen) {}
 
     Vector3f getRadiance(Ray ray, int depth = 1);
@@ -24,7 +23,6 @@ public:
 private:
     Group *group;
     Medium *medium;
-    Vector3f background_color;
     RandomGenerator &gen;
 
     static const int MIN_DEPTH = 5;

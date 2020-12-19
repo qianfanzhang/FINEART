@@ -37,17 +37,12 @@ public:
         return medium;
     }
 
-    const Vector3f &getBackgroundColor() const {
-        return background_color;
-    }
-
 private:
     Camera *camera;
     Group *group;
     Medium *medium;
     std::vector<Texture *> textures;
     std::vector<Material *> materials;
-    Vector3f background_color;
 
     Texture *add(Texture *texture) {
         textures.push_back(texture);

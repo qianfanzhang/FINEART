@@ -36,7 +36,6 @@ int main(int argc, char *argv[]) {
     Group *group = world.getGroup();
     Medium *medium = world.getMedium();
     Image image(camera->getWidth(), camera->getHeight());
-    Vector3f background_color = world.getBackgroundColor();
     std::random_device rd;
 
     std::cout << "[main] start rendering " << scene_name << " with sample=" << num_samples << ", resolution=" << resolution << std::endl;
@@ -51,7 +50,7 @@ int main(int argc, char *argv[]) {
 #pragma omp parallel for schedule(dynamic, 1)
         for (int x = 0; x < camera->getWidth(); ++x) {
             RandomGenerator gen(rd());
-            PathTracer pt(group, medium, background_color, gen);
+            PathTracer pt(group, medium, gen);
             for (int y = 0; y < camera->getHeight(); ++y) {
                 Vector3f color = Vector3f::ZERO;
                 for (int i = 0; i < n; ++i) {

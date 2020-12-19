@@ -32,7 +32,6 @@ Scene::Scene(const std::string &scene_name, int resolution) {
     auto start_time = std::chrono::system_clock::now();
     std::cout << "[Scene] start building " << scene_name << std::endl;
 
-    background_color = vec(0, 0, 0);
     medium = nullptr;
 
     group = new KdTree();
