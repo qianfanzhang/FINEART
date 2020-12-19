@@ -8,8 +8,9 @@
 
 namespace Utils {
 
-constexpr float pi = 3.1415926536f;
-constexpr float inv4pi = 1 / (4 * pi);
+constexpr float PI = 3.1415926536f;
+constexpr float INV_PI = 1 / PI;
+constexpr float INV_4PI = 1 / (4 * PI);
 constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
 constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
 constexpr float MIN_FLOAT = std::numeric_limits<float>::min();
@@ -18,8 +19,16 @@ inline constexpr float gamma(int n) {
     return (n * MACHINE_EPS) / (1 - n * MACHINE_EPS);
 }
 
+inline float rad(float deg) {
+    return deg * PI / 180;
+}
+
 inline float clamp(float x) {
     return x < 0 ? 0 : (x < 1 ? x : 1);
+}
+
+inline Vector3f clamp(Vector3f v) {
+    return {clamp(v.x()), clamp(v.y()), clamp(v.z())};
 }
 
 // A modf that always returns nonnagative value

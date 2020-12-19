@@ -43,6 +43,14 @@ public:
             return diffuse * texture->getColor(uv);
     }
 
+    float BSDF(const Vector3f &wo __attribute__((unused)), const Vector3f &wi __attribute__((unused))) const {
+        if (type == DIFFUSE) {
+            return Utils::INV_PI;
+        } else {
+            abort();
+        }
+    }
+
     float sampleRay(Ray &ray, const Hit &hit, RandomGenerator &gen) const {
         Vector3f point = ray.pointAtParameter(hit.getT());
         Vector3f direction = ray.getDirection();

@@ -1,5 +1,5 @@
 camera = new ThinLenCamera(vec(0, 0, 4), vec(0, 0, -1), vec(0, 1, 0),
-                           rad(70), 0, 4.8, resolution, resolution);
+                           70, 0, 4.8, resolution, resolution);
 
 group->add(new Sphere(vec(0, 3.5, 0.75), 1, light));
 

@@ -39,8 +39,8 @@ public:
         Vector3f d = (point - center).normalized();
         float phi = std::atan2(d.y(), d.x());
         float theta = std::asin(d.z());
-        float u = 0.5 + phi / (2 * Utils::pi);
-        float v = 0.5 + theta / Utils::pi;
+        float u = 0.5 + phi / (2 * Utils::PI);
+        float v = 0.5 + theta / Utils::PI;
         return Vector2f(u, v);
     }
 

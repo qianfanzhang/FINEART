@@ -40,9 +40,9 @@ protected:
 class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
-                      const Vector3f &up, float angle, int imgW, int imgH)
+                      const Vector3f &up, float deg, int imgW, int imgH)
         : Camera(center, direction, up, imgW, imgH) {
-        float t = 2 * tanf(angle / 2);
+        float t = 2 * tanf(Utils::rad(deg) / 2);
         offset = Vector2f(this->width / 2.f, this->height / 2.f);
         focal_length = Vector2f(this->width / t, this->width / t);
         rotation = Matrix3f(this->horizontal, this->up, this->direction);
@@ -62,8 +62,8 @@ protected:
 class ThinLenCamera : public PerspectiveCamera {
 public:
     ThinLenCamera(const Vector3f &center, const Vector3f &direction,
-                  const Vector3f &up, float angle, float aperture, float focus_dist, int imgW, int imgH)
-        : PerspectiveCamera(center, direction, up, angle, imgW, imgH) {
+                  const Vector3f &up, float deg, float aperture, float focus_dist, int imgW, int imgH)
+        : PerspectiveCamera(center, direction, up, deg, imgW, imgH) {
         this->len_radius = aperture / 2;
         this->focus_dist = focus_dist;
     }

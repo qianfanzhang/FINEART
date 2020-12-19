@@ -15,6 +15,8 @@ public:
     RandomGenerator(unsigned int seed)
         : e(seed) {}
 
+    RandomGenerator(const RandomGenerator &) = delete;
+
     float uniform() {
         std::uniform_real_distribution<> dist(0, 1);
         return dist(e);
@@ -46,7 +48,7 @@ public:
     Vector3f uniformOnHemisphere(const Vector3f &w) {
         Vector3f u = Utils::getUAxisGivenNormal(w);
         Vector3f v = Utils::getVAxisGivenNormal(w, u);
-        float theta = 2 * Utils::pi * uniform();
+        float theta = 2 * Utils::PI * uniform();
         float r2 = uniform(), r = std::sqrt(r2); // length projected on uv-plane
         Vector3f d = (u * std::cos(theta) * r + v * std::sin(theta) * r + w * std::sqrt(1 - r2)).normalized();
         return d;
@@ -60,19 +62,19 @@ public:
             cos_theta = 1 - 2 * uniform();
         else {
             float t = (1 - g * g) / (1 + g - 2 * g * uniform());
-            cos_theta = (1 + g * g - t * t) / (2 * g); // FIXME: positive or negative?
+            cos_theta = -(1 + g * g - t * t) / (2 * g); // FIXME: positive or negative?
         }
 
         // compute wi for Henyey-Greenstein sample
         float sin_theta = std::sqrt(std::max((float)0, 1 - cos_theta * cos_theta));
-        float phi = 2 * Utils::pi * uniform();
+        float phi = 2 * Utils::PI * uniform();
         Vector3f u = Utils::getUAxisGivenNormal(wo);
         Vector3f v = Utils::getVAxisGivenNormal(wo, u);
         wi = sin_theta * std::cos(phi) * u + sin_theta * std::sin(phi) * v + cos_theta * wo;
 
         // compute probability density
         float t = 1 + g * g + 2 * g * cos_theta;
-        return Utils::inv4pi * (1 - g * g) / (t * std::sqrt(t));
+        return Utils::INV_4PI * (1 - g * g) / (t * std::sqrt(t));
     }
 };
 

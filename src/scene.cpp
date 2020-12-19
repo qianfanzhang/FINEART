@@ -5,6 +5,7 @@
 #include "camera.hpp"
 #include "group/basic_group.hpp"
 #include "group/kd_tree.hpp"
+#include "light.hpp"
 #include "material.hpp"
 #include "object/mesh.hpp"
 #include "object/plane.hpp"
@@ -13,6 +14,7 @@
 #include <chrono>
 
 using Mat4 = Matrix4f;
+using Utils::rad;
 
 Vector2f vec(float x, float y) {
     return Vector2f(x, y);
@@ -20,10 +22,6 @@ Vector2f vec(float x, float y) {
 
 Vector3f vec(float x, float y, float z) {
     return Vector3f(x, y, z);
-}
-
-float rad(float deg) {
-    return deg / 180 * Utils::pi;
 }
 
 // The new objects will NOT be deleted until the program exists
@@ -37,21 +35,7 @@ Scene::Scene(const std::string &scene_name, int resolution) {
     group = new KdTree();
 
 #include "scene/common_resources.hpp"
-
-    if (scene_name == "earth_in_box") {
-#include "scene/earth_in_box.hpp"
-    } else if (scene_name == "dragon_in_box") {
-#include "scene/dragon_in_box.hpp"
-    } else if (scene_name == "girl_in_box") {
-#include "scene/girl_in_box.hpp"
-    } else if (scene_name == "glass_in_box") {
-#include "scene/glass_in_box.hpp"
-    } else if (scene_name == "sphere_in_box") {
-#include "scene/sphere_in_box.hpp"
-    } else if (scene_name == "house") {
-#include "scene/house.hpp"
-    } else
-        throw std::invalid_argument("scene_name not found");
+#include "scene/all_scenes.hpp"
 
     assert(camera != nullptr);
 

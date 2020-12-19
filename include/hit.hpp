@@ -18,6 +18,8 @@ public:
         object = nullptr;
     }
 
+    Hit(float t) : t(t), object(nullptr) {}
+
     Hit(float t, Object3D *object, const Vector2f &uv, const Vector3f &normal)
         : t(t), object(object), uv(uv), normal(normal) {}
 
@@ -25,7 +27,7 @@ public:
         t = h.t;
         object = h.object;
         uv = h.uv;
-        normal = h.normal.normalized();
+        normal = h.normal;
     }
 
     ~Hit() = default;
@@ -57,7 +59,6 @@ public:
         this->normal = normal.normalized();
     }
 
-private:
     float t;
     Object3D *object;
     Vector2f uv;
