@@ -23,12 +23,12 @@ inline float rad(float deg) {
     return deg * PI / 180;
 }
 
-inline float clamp(float x) {
-    return x < 0 ? 0 : (x < 1 ? x : 1);
+inline float clamp(float x, float limit = 1) {
+    return x < 0 ? 0 : (x < limit ? x : limit);
 }
 
-inline Vector3f clamp(Vector3f v) {
-    return {clamp(v.x()), clamp(v.y()), clamp(v.z())};
+inline Vector3f clamp(Vector3f v, float limit = 1) {
+    return {clamp(v.x(), limit), clamp(v.y(), limit), clamp(v.z(), limit)};
 }
 
 // A modf that always returns nonnagative value

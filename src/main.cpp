@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
                 Vector3f color = Vector3f::ZERO;
                 for (int i = 0; i < n; ++i) {
                     Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f(), gen);
-                    color += Utils::clamp(pt.getRadiance(ray));
+                    color += Utils::clamp(pt.getRadiance(ray), 100);
                 }
                 color_map[x][y] += color;
             }

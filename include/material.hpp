@@ -43,12 +43,15 @@ public:
             return diffuse * texture->getColor(uv);
     }
 
+    bool isDeltaBSDF() const {
+        return type != DIFFUSE;
+    }
+
     float BSDF(const Vector3f &wo __attribute__((unused)), const Vector3f &wi __attribute__((unused))) const {
         if (type == DIFFUSE) {
             return Utils::INV_PI;
-        } else {
+        } else
             abort();
-        }
     }
 
     float sampleRay(Ray &ray, const Hit &hit, RandomGenerator &gen) const {

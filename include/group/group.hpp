@@ -31,6 +31,9 @@ public:
 
     Vector3f sampleAllLights(const Ray &ray, const Hit &hit, Material *material, Medium *medium, RandomGenerator &gen) {
         Vector3f L = Vector3f::ZERO;
+        if (material != nullptr && material->isDeltaBSDF())
+            return L;
+
         Vector3f point = ray.pointAtParameter(hit.t);
 
         for (Light *li : lights) {

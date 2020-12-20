@@ -10,7 +10,7 @@ group->add(new SpotLight({0, 1.95, 0.75}, {0, -1, 0}, 50, 30, {100, 100, 100}));
 group->add(new Plane(vec(0, 1, 0), -2, diff_grey));
 group->add(new Plane(vec(0, 1, 0), 2, diff_grey));
 
-group->add(new Mesh("mesh/fixed.perfect.dragon.100K.obj", diff_green, Matrix4f::translation(0.4, -1, 0.6) * Matrix4f::uniformScaling(1.5)));
+group->add(new Mesh("mesh/fixed.perfect.dragon.100K.obj", refr, Matrix4f::translation(0.4, -1, 0.6) * Matrix4f::uniformScaling(1.5)));
 // group->add(new Mesh("mesh/bunny.fine.obj", diff_red, Matrix4f::translation(-0.5, -2.35, -1.1) * Matrix4f::uniformScaling(10)));
 
 medium = new Medium({0, 0, 0}, {0.1, 0.1, 0.1}, 0);
