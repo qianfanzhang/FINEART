@@ -17,4 +17,4 @@ add(new Plane(vec(0, 1, 0), -2, diff_grey));
 add(new Mesh("mesh/fixed.perfect.dragon.100K.obj", diff_green, Matrix4f::translation(0.4, -1, 0.6) * Matrix4f::uniformScaling(1.5)));
 // add(new Mesh("mesh/bunny.fine.obj", diff_red, Matrix4f::translation(-0.5, -2.35, -1.1) * Matrix4f::uniformScaling(10)));
 
-// medium = new Medium({0, 0, 0}, {0.1, 0.1, 0.1}, 0);
+medium = new Medium({0, 0, 0}, {0.1, 0.1, 0.1}, 0);
