@@ -47,9 +47,14 @@ public:
         return type != DIFFUSE;
     }
 
-    float BSDF(const Vector3f &wo __attribute__((unused)), const Vector3f &wi __attribute__((unused))) const {
+    float BSDF(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const {
         if (type == DIFFUSE) {
-            return Utils::INV_PI;
+            float u = Vector3f::dot(wo, normal);
+            float v = Vector3f::dot(wi, normal);
+            if ((u >= 0 && v >= 0) || (u <= 0 && v <= 0))
+                return Utils::INV_PI;
+            else
+                return 0;
         } else
             abort();
     }
