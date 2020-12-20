@@ -40,26 +40,22 @@ public:
             Vector3f dir;
             float li_t;
             Vector3f intensity = li->sampleRay(point, dir, li_t, gen);
-            // printf("Ray({%.2f,%.2f,%.2f}, {%.2f,%.2f,%.2f}), t=%.2f\n", point.x(), point.y(), point.z(), dir.x(), dir.y(), dir.z(), li_t);
-            // printf("Intensity=%.3f\n", intensity.x());
             if (intensity.length() < 1e-3)
                 continue;
             Hit tmp_hit;
             tmp_hit.t = li_t;
             if (!intersect(Ray(point, dir), tmp_hit)) {
+                // FIXME: unhandleled medium interaction
                 if (material != nullptr) {
-                    float f = material->BSDF(dir, -ray.direction) * std::abs(Vector3f::dot(dir, hit.normal));
+                    float f = material->BSDF(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
                     L += intensity * f;
                 } else {
                     assert(medium != nullptr);
                     float f = medium->pdf(dir, -ray.direction);
                     L += intensity * f;
                 }
-            } else {
-                // printf("oops, new_t=%.3f\n", tmp_hit.t);
             }
         }
-        // printf("L={%.2f,%.2f,%.2f}\n", L.x(), L.y(), L.z());
 
         return L;
     }
