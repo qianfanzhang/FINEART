@@ -22,7 +22,7 @@ public:
         bool interacted = t < tmax;
         if (interacted) {
             Vector3f next_d;
-            gen.henyeyGreenstein(-r.getDirection(), next_d, g);
+            gen.henyeyGreenstein(-r.direction, next_d, g);
             r = Ray(r.pointAtParameter(t), next_d);
             // printf("interact %.2f %.2f {%.2f,%.2f,%.2f}\n", t, tmax, r.origin.x(), r.origin.y(), r.origin.z());
             tmax = t;

@@ -171,7 +171,7 @@ bool KdTree::intersect_good(const Ray &r, Hit &h) {
     if (!world_bound.intersect(r, tmin, tmax))
         return false;
 
-    Vector3f inv_dir(1 / r.getDirection().x(), 1 / r.getDirection().y(), 1 / r.getDirection().z());
+    Vector3f inv_dir(1 / r.direction.x(), 1 / r.direction.y(), 1 / r.direction.z());
 
     std::stack<Candidate> stack;
     int id = 0;
@@ -204,11 +204,11 @@ bool KdTree::intersect_good(const Ray &r, Hit &h) {
         } else {
             int axis = node.splitAxis();
             float split_pos = node.splitPos();
-            float origin_pos = r.getOrigin()[axis];
+            float origin_pos = r.origin[axis];
             float t_plane = (split_pos - origin_pos) * inv_dir[axis];
 
             int child0, child1;
-            if ((origin_pos < split_pos) || (origin_pos == split_pos && r.getDirection()[axis] <= 0)) {
+            if ((origin_pos < split_pos) || (origin_pos == split_pos && r.direction[axis] <= 0)) {
                 child0 = id + 1;
                 child1 = node.rchild();
             } else {

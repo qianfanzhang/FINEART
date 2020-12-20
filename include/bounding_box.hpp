@@ -1,6 +1,7 @@
 #ifndef MY_BOUNDING_BOX_H
 #define MY_BOUNDING_BOX_H
 
+#include "hit.hpp"
 #include "ray.hpp"
 #include "utils.hpp"
 #include "vecmath.h"
@@ -49,10 +50,12 @@ struct BoundingBox {
     }
 
     bool intersect(const Ray &ray, float &tmin, float &tmax) {
+        tmin = Hit::T_MIN;
+        tmax = Hit::T_MAX;
         for (int i = 0; i < 3; ++i) {
-            float inv_dir = 1 / ray.getDirection()[i];
-            float t_near = (min[i] - ray.getOrigin()[i]) * inv_dir;
-            float t_far = (max[i] - ray.getOrigin()[i]) * inv_dir;
+            float inv_dir = 1 / ray.direction[i];
+            float t_near = (min[i] - ray.origin[i]) * inv_dir;
+            float t_far = (max[i] - ray.origin[i]) * inv_dir;
             if (t_near > t_far)
                 std::swap(t_near, t_far);
             tmin = t_near > tmin ? t_near : tmin;

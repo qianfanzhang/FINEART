@@ -19,14 +19,6 @@ public:
         direction = r.direction;
     }
 
-    const Vector3f &getOrigin() const {
-        return origin;
-    }
-
-    const Vector3f &getDirection() const {
-        return direction;
-    }
-
     Vector3f pointAtParameter(float t) const {
         return origin + direction * t;
     }
@@ -36,7 +28,7 @@ public:
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Ray &r) {
-    os << "Ray <" << r.getOrigin() << ", " << r.getDirection() << ">";
+    os << "Ray <" << r.origin << ", " << r.direction << ">";
     return os;
 }
 

@@ -22,9 +22,9 @@ public:
     }
 
     bool intersect(const Ray &r, Hit &h) override {
-        float v = Vector3f::dot(normal, r.getDirection());
+        float v = Vector3f::dot(normal, r.direction);
         if (v != 0) {
-            float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
+            float t = (d - Vector3f::dot(normal, r.origin)) / v;
             if (t >= Hit::T_MIN && h.getT() > t) {
                 const Vector3f &p = r.pointAtParameter(t);
                 h.set(t, this, getUVPoint(p), v < 0 ? normal : -normal);

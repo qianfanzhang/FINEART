@@ -61,7 +61,7 @@ public:
 
     float sampleRay(Ray &ray, const Hit &hit, RandomGenerator &gen) const {
         Vector3f point = ray.pointAtParameter(hit.getT());
-        Vector3f direction = ray.getDirection();
+        Vector3f direction = ray.direction;
         Vector3f normal = hit.getNormal();
         Vector3f normal0 = Vector3f::dot(direction, normal) < 0 ? normal : -normal;
 

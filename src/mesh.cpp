@@ -16,18 +16,18 @@ static const float EPS = 1e-6;
 bool Triangle::intersect(const Ray &r, Hit &h) {
     Vector3f ab = mesh->verticies[_v[1]] - mesh->verticies[_v[0]];
     Vector3f ac = mesh->verticies[_v[2]] - mesh->verticies[_v[0]];
-    Vector3f p = Vector3f::cross(r.getDirection(), ac);
+    Vector3f p = Vector3f::cross(r.direction, ac);
     float det = Vector3f::dot(ab, p);
     if (std::abs(det) < EPS)
         return false;
 
     float invDet = 1 / det;
-    Vector3f tv = r.getOrigin() - mesh->verticies[_v[0]];
+    Vector3f tv = r.origin - mesh->verticies[_v[0]];
     float u = Vector3f::dot(tv, p) * invDet;
     if (u < 0 || u > 1)
         return false;
     Vector3f q = Vector3f::cross(tv, ab);
-    float v = Vector3f::dot(r.getDirection(), q) * invDet;
+    float v = Vector3f::dot(r.direction, q) * invDet;
     if (v < 0 || u + v > 1)
         return false;
 
