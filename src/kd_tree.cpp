@@ -144,17 +144,30 @@ struct Candidate {
     float tmin, tmax;
 };
 
-bool KdTree::intersect(const Ray &r, Hit &h, float tmin) {
+bool KdTree::intersect(const Ray &r, Hit &h) {
     bool hitted = false;
     for (auto obj : bad_objects) {
-        hitted |= obj->intersect(r, h, tmin);
+        hitted |= obj->intersect(r, h);
     }
-    hitted |= intersect_good(r, h, tmin);
+    hitted |= intersect_good(r, h);
+
+    /*
+    bool bf_hitted = false;
+    Hit bf_h;
+    for (auto &obj : objects)
+        bf_hitted |= obj->intersect(r, bf_h);
+    if (hitted != bf_hitted) {
+        printf("fuck\n");
+        fflush(stdout);
+        // abort();
+    }
+*/
+
     return hitted;
 }
 
-bool KdTree::intersect_good(const Ray &r, Hit &h, float tmin) {
-    float tmax = std::numeric_limits<float>::max();
+bool KdTree::intersect_good(const Ray &r, Hit &h) {
+    float tmin, tmax;
     if (!world_bound.intersect(r, tmin, tmax))
         return false;
 
@@ -172,11 +185,12 @@ bool KdTree::intersect_good(const Ray &r, Hit &h, float tmin) {
         if (node.isLeaf()) {
             int n = node.size();
             if (n == 1) {
-                hitted |= objects[node.index()]->intersect(r, h, tmin);
+                hitted |= objects[node.index()]->intersect(r, h);
             } else {
                 for (int i = 0; i < n; ++i) {
                     int idx = indicies_pool[node.offset() + i];
-                    hitted |= objects[idx]->intersect(r, h, tmin);
+                    hitted |= objects[idx]->intersect(r, h);
+                    // printf("intersect with %s\n", objects[idx]->getString().c_str());
                 }
             }
 

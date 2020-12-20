@@ -17,7 +17,7 @@ public:
 
     ~Sphere() override = default;
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h) override {
         Vector3f oc = center - r.getOrigin();
         float a = r.getDirection().squaredLength();
         float b = Vector3f::dot(oc, r.getDirection());
@@ -26,7 +26,7 @@ public:
         if (det > 0) {
             det = std::sqrt(det);
             float t;
-            if (((t = (b - det) / a) >= tmin || (t = (b + det) / a) >= tmin) && h.getT() > t) {
+            if (((t = (b - det) / a) >= Hit::T_MIN || (t = (b + det) / a) >= Hit::T_MIN) && h.getT() > t) {
                 const Vector3f &p = r.pointAtParameter(t);
                 h.set(t, this, getUVPoint(p), p - center);
                 return true;

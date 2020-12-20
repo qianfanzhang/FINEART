@@ -13,7 +13,7 @@
 
 static const float EPS = 1e-6;
 
-bool Triangle::intersect(const Ray &r, Hit &h, float tmin) {
+bool Triangle::intersect(const Ray &r, Hit &h) {
     Vector3f ab = mesh->verticies[_v[1]] - mesh->verticies[_v[0]];
     Vector3f ac = mesh->verticies[_v[2]] - mesh->verticies[_v[0]];
     Vector3f p = Vector3f::cross(r.getDirection(), ac);
@@ -33,7 +33,7 @@ bool Triangle::intersect(const Ray &r, Hit &h, float tmin) {
 
     float t = Vector3f::dot(ac, q) * invDet;
 
-    if (t >= tmin && t < h.getT()) {
+    if (t >= Hit::T_MIN && t < h.getT()) {
         Vector2f texcoord = (1 - u - v) * mesh->texcoords[_t[0]] + u * mesh->texcoords[_t[1]] + v * mesh->texcoords[_t[2]];
         Vector3f normal = (1 - u - v) * mesh->vec_normals[_n[0]] + u * mesh->vec_normals[_n[1]] + v * mesh->vec_normals[_n[2]] + mesh->tri_normals[id];
         // printf("%.2f %.2f %.2f\n", normal.x(), normal.y(), normal.z());
@@ -50,10 +50,10 @@ std::vector<Object3D *> Mesh::getBasicObjects() {
     return objs;
 }
 
-bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
+bool Mesh::intersect(const Ray &r, Hit &h) {
     bool result = false;
     for (auto &triangle : triangles)
-        result |= triangle.intersect(r, h, tmin);
+        result |= triangle.intersect(r, h);
     return result;
 }
 

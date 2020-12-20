@@ -32,7 +32,7 @@ public:
 
     virtual BoundingBox getBoundingBox() const = 0;
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
+    virtual bool intersect(const Ray &r, Hit &h) = 0;
 
     virtual Vector2f getUVPoint(const Vector3f &point __attribute__((unused))) const {
         abort();

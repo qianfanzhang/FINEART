@@ -49,7 +49,7 @@ private:
 
 class KdTree : public Group {
 public:
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h) override;
 
     void debug() override;
 
@@ -60,7 +60,7 @@ private:
 
     void buildTree(const BoundingBox &bound, const std::vector<int> &indicies, int depth);
 
-    bool intersect_good(const Ray &r, Hit &h, float tmin);
+    bool intersect_good(const Ray &r, Hit &h);
 
     void debugTree(int id);
 

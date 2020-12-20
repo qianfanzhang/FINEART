@@ -17,7 +17,7 @@ public:
         return BoundingBox();
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h) override;
 
     std::string getString() const override {
         char buff[100];
@@ -50,7 +50,7 @@ public:
 
     int &operator[](int i) { return _v[i]; }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h) override;
 
     std::string getString() const override {
         char buff[100];

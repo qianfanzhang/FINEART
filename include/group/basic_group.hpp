@@ -8,10 +8,11 @@ class BasicGroup : public Group {
 public:
     BasicGroup() {}
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h) override {
         bool result = false;
-        for (auto &obj : objects)
-            result |= obj->intersect(r, h, tmin);
+        for (auto &obj : objects) {
+            result |= obj->intersect(r, h);
+        }
         return result;
     }
 

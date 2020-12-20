@@ -21,11 +21,11 @@ public:
         return BoundingBox();
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h) override {
         float v = Vector3f::dot(normal, r.getDirection());
         if (v != 0) {
             float t = (d - Vector3f::dot(normal, r.getOrigin())) / v;
-            if (t >= tmin && h.getT() > t) {
+            if (t >= Hit::T_MIN && h.getT() > t) {
                 const Vector3f &p = r.pointAtParameter(t);
                 h.set(t, this, getUVPoint(p), v < 0 ? normal : -normal);
                 return true;
