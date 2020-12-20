@@ -109,11 +109,11 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
             textures.emplace_back("texture/" + m.diffuse_texname, Vector3f(m.diffuse_texopt.scale));
             material.texture = &textures.back();
         }
-        material.type = DIFFUSE;
-        // if (m.dissolve == 1)
-        //     material.type = DIFFUSE;
-        // else
-        //     material.type = REFRACTIVE;
+        // material.type = DIFFUSE;
+        if (m.dissolve == 1)
+            material.type = DIFFUSE;
+        else
+            material.type = REFRACTIVE;
         material.emission = Vector3f(m.emission);
 
         materials.push_back(material);
