@@ -36,6 +36,7 @@ bool Triangle::intersect(const Ray &r, Hit &h, float tmin) {
     if (t >= tmin && t < h.getT()) {
         Vector2f texcoord = (1 - u - v) * mesh->texcoords[_t[0]] + u * mesh->texcoords[_t[1]] + v * mesh->texcoords[_t[2]];
         Vector3f normal = (1 - u - v) * mesh->vec_normals[_n[0]] + u * mesh->vec_normals[_n[1]] + v * mesh->vec_normals[_n[2]] + mesh->tri_normals[id];
+        // printf("%.2f %.2f %.2f\n", normal.x(), normal.y(), normal.z());
         h.set(t, this, texcoord, normal);
         return true;
     }
@@ -108,10 +109,11 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
             textures.emplace_back("texture/" + m.diffuse_texname, Vector3f(m.diffuse_texopt.scale));
             material.texture = &textures.back();
         }
-        if (m.dissolve == 1)
-            material.type = DIFFUSE;
-        else
-            material.type = REFRACTIVE;
+        material.type = DIFFUSE;
+        // if (m.dissolve == 1)
+        //     material.type = DIFFUSE;
+        // else
+        //     material.type = REFRACTIVE;
         material.emission = Vector3f(m.emission);
 
         materials.push_back(material);

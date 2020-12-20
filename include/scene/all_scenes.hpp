@@ -13,6 +13,8 @@ if (scene_name == "dragon_in_box") {
 	#include "glass_in_box.scene"
 } else if (scene_name == "house") {
 	#include "house.scene"
+} else if (scene_name == "simple_room") {
+	#include "simple_room.scene"
 } else if (scene_name == "sphere_in_box") {
 	#include "sphere_in_box.scene"
 } else 

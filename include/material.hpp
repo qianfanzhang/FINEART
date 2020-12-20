@@ -66,17 +66,17 @@ public:
         Vector3f normal0 = Vector3f::dot(direction, normal) < 0 ? normal : -normal;
 
         if (type == DIFFUSE) {
-            Vector3f next_d = gen.uniformOnHemisphere(normal);
+            Vector3f next_d = gen.uniformOnHemisphere(normal0);
             ray = Ray(point, next_d);
             return 1;
 
         } else if (type == SPECULAR) {
-            Vector3f next_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
+            Vector3f next_d = (direction - 2 * Vector3f::dot(normal0, direction) * normal0).normalized();
             ray = Ray(point, next_d);
             return 1;
 
         } else if (type == REFRACTIVE) {
-            Vector3f refl_d = (direction - 2 * Vector3f::dot(normal, direction) * normal).normalized();
+            Vector3f refl_d = (direction - 2 * Vector3f::dot(normal0, direction) * normal0).normalized();
             Ray refl_ray(point, refl_d);
 
             bool into = Vector3f::dot(normal, normal0) > 0;
