@@ -58,6 +58,11 @@ private:
         group->add(object);
         return object;
     }
+
+    Light *add(Light *light) {
+        group->add(light);
+        return light;
+    }
 };
 
 #endif

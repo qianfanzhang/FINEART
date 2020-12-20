@@ -2,6 +2,7 @@
 #define MY_LIGHT_H
 
 #include "group/group.hpp"
+#include "hit.hpp"
 #include "random.hpp"
 #include "ray.hpp"
 #include "vecmath.h"
@@ -47,10 +48,8 @@ public:
         float cos_theta = Vector3f::dot(-dir, normal);
         if (cos_theta < cos_width)
             return Vector3f::ZERO;
-        if (cos_theta > cos_falloff) {
-            // printf("%.3f\n", (intensity / d2).x());
+        if (cos_theta > cos_falloff)
             return intensity / d2;
-        }
         float delta = (cos_theta - cos_width) / (cos_falloff - cos_width);
         return intensity * (delta * delta) * (delta * delta) / d2;
     }
@@ -60,6 +59,22 @@ private:
     Vector3f normal;
     float cos_width;
     float cos_falloff;
+    Vector3f intensity;
+};
+
+class DistantLight : public Light {
+public:
+    DistantLight(const Vector3f &normal, const Vector3f &intensity)
+        : normal(normal.normalized()), intensity(intensity) {}
+
+    Vector3f sampleRay(const Vector3f &point __attribute__((unused)), Vector3f &dir, float &t, RandomGenerator &gen __attribute__((unused))) override {
+        dir = -normal;
+        t = Hit::T_MAX;
+        return intensity;
+    }
+
+private:
+    Vector3f normal;
     Vector3f intensity;
 };
 
