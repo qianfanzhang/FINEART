@@ -25,8 +25,8 @@ private:
     Medium *medium;
     RandomGenerator &gen;
 
-    static constexpr int MIN_DEPTH = 5;
-    static constexpr int MAX_DEPTH = 11;
+    static constexpr int MIN_DEPTH = 3;
+    static constexpr int MAX_DEPTH = 6;
     static constexpr float EPS = 1e-4;
 };
 
