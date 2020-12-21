@@ -17,5 +17,7 @@ if (scene_name == "dragon_in_box") {
 	#include "simple_room.scene"
 } else if (scene_name == "sphere_in_box") {
 	#include "sphere_in_box.scene"
+} else if (scene_name == "sphere_under_spotlight") {
+	#include "sphere_under_spotlight.scene"
 } else 
 	throw std::invalid_argument("scene not found");
