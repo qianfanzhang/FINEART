@@ -6,7 +6,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-deprecated-copy -Wno-sign-compare")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-deprecated-copy -Wno-sign-compare -Wno-unused-parameter")
 set(CMAKE_CXX_FLAGS_DEBUG "-O2 -fsanitize=address -fsanitize=undefined")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 

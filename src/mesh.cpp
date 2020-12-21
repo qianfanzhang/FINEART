@@ -102,21 +102,18 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
     materials.reserve(obj_materials.size());
     textures.reserve(obj_materials.size());
     for (auto &m : obj_materials) {
-        Material material;
-        material.diffuse = {m.diffuse[0], m.diffuse[1], m.diffuse[2]};
+        Vector3f color(m.diffuse);
+        Vector3f emission(m.emission);
+        Texture *texture = nullptr;
 
         if (!m.diffuse_texname.empty()) {
             textures.emplace_back("texture/" + m.diffuse_texname, Vector3f(m.diffuse_texopt.scale));
-            material.texture = &textures.back();
+            texture = &textures.back();
         }
-        // material.type = DIFFUSE;
-        if (m.dissolve == 1)
-            material.type = DIFFUSE;
-        else
-            material.type = REFRACTIVE;
-        material.emission = Vector3f(m.emission);
+        
+        // m.disslove
 
-        materials.push_back(material);
+        materials.push_back(Material({{new DiffuseBSDF(), 1}}, color, emission, texture));
     }
 
     for (auto &shape : shapes) {

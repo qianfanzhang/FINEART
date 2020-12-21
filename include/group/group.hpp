@@ -26,10 +26,16 @@ public:
     }
 
     Vector3f sampleAllLights(const Ray &ray, const Hit &hit, Material *material, Medium *medium, RandomGenerator &gen) {
-        Vector3f L = Vector3f::ZERO;
-        if (material != nullptr && material->isDeltaBSDF())
-            return L;
+        assert(material != nullptr || medium != nullptr);
 
+        BSDF *bsdf = nullptr;
+        float beta = material == nullptr ? 1 : material->sampleBSDF(bsdf, gen);
+        if (material != nullptr)
+            assert(bsdf != nullptr);
+        if (bsdf != nullptr && bsdf->isDelta())
+            return Vector3f::ZERO;
+
+        Vector3f L = Vector3f::ZERO;
         Vector3f point = ray.pointAtParameter(hit.t);
 
         for (Light *li : lights) {
@@ -42,13 +48,12 @@ public:
             tmp_hit.t = li_t;
             if (!intersect(Ray(point, dir), tmp_hit)) {
                 // FIXME: unhandleled medium interaction
-                if (material != nullptr) {
-                    float f = material->BSDF(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
-                    L += intensity * f;
+                if (bsdf != nullptr) {
+                    float f = bsdf->f(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
+                    L += beta * intensity * f;
                 } else {
-                    assert(medium != nullptr);
                     float f = medium->pdf(dir, -ray.direction);
-                    L += intensity * f;
+                    L += beta * intensity * f;
                 }
             }
         }

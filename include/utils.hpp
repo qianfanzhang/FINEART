@@ -6,6 +6,8 @@
 #include <cmath>
 #include <limits>
 
+#define UNUSED __attribute__((unused))
+
 namespace Utils {
 
 constexpr float PI = 3.1415926536f;
