@@ -27,3 +27,4 @@ Material *refr_red = add(new Material({{new RefractiveBSDF(1.5), 1}}, red));
 Material *refr_green = add(new Material({{new RefractiveBSDF(1.5), 1}}, green));
 Material *refr_blue = add(new Material({{new RefractiveBSDF(1.5), 1}}, blue));
 Material *refr_grey = add(new Material({{new RefractiveBSDF(1.5), 1}}, grey));
+Material *refr_white0 = add(new Material({{new DiffuseBSDF(), 0.3}, {new RefractiveBSDF(1.5), 0.7}}, white));

@@ -78,4 +78,24 @@ private:
     Vector3f intensity;
 };
 
+/*
+class DiffuseAreaLight : public Light {
+public:
+    DistantLight(const Vector3f &pos, const Vector3f &normal, float radius, const Vector3f &intensity)
+        : pos(pos), normal(normal.normalized()), radius(radius), intensity(intensity) {}
+
+    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen) override {
+        dir = -normal;
+        t = Hit::T_MAX;
+        return intensity;
+    }
+
+private:
+    Vector3f pos;
+    Vector3f normal;
+    float radius;
+    Vector3f intensity;
+};
+*/
+
 #endif
