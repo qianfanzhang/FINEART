@@ -67,7 +67,7 @@ public:
 
 class RefractiveBSDF : public BSDF {
 public:
-    RefractiveBSDF(float nt = 1.5) : nt(nt) {}
+    RefractiveBSDF(float nt) : nt(nt) {}
 
     float f(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
         return 0;
@@ -187,7 +187,7 @@ public:
         float beta = sampleBSDF(bsdf, gen);
 
         Vector3f next_d;
-        bsdf->sample(next_d, -ray.direction, hit.getNormal(), gen);
+        beta *= bsdf->sample(next_d, -ray.direction, hit.getNormal(), gen);
         ray = Ray(ray.pointAtParameter(hit.getT()), next_d);
 
         return beta;
