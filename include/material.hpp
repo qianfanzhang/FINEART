@@ -19,7 +19,7 @@ class BSDF {
 public:
     virtual ~BSDF() = default;
 
-    virtual float f(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const = 0;
+    virtual float pdf(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const = 0;
 
     virtual float sample(Vector3f &wo, const Vector3f &wi, const Vector3f &normal, RandomGenerator &gen) const = 0;
 
@@ -30,7 +30,7 @@ class DiffuseBSDF : public BSDF {
 public:
     DiffuseBSDF() = default;
 
-    float f(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
+    float pdf(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
         float u = Vector3f::dot(wo, normal);
         float v = Vector3f::dot(wi, normal);
         return (u >= 0 && v >= 0) || (u <= 0 && v <= 0) ? Utils::INV_PI : 0;
@@ -51,7 +51,7 @@ class SpecularBSDF : public BSDF {
 public:
     SpecularBSDF() = default;
 
-    float f(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
+    float pdf(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
         return 0;
     }
 
@@ -69,7 +69,7 @@ class RefractiveBSDF : public BSDF {
 public:
     RefractiveBSDF(float nt) : nt(nt) {}
 
-    float f(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
+    float pdf(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
         return 0;
     }
 

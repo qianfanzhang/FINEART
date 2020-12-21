@@ -49,7 +49,7 @@ public:
             if (!intersect(Ray(point, dir), tmp_hit)) {
                 // FIXME: unhandleled medium interaction
                 if (bsdf != nullptr) {
-                    float f = bsdf->f(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
+                    float f = bsdf->pdf(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
                     L += beta * intensity * f;
                 } else {
                     float f = medium->pdf(dir, -ray.direction);
