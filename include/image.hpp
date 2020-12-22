@@ -31,6 +31,7 @@ public:
     void set(int x, int y, const Vector3f &color) {
         assert(x >= 0 && x < image.get_width());
         assert(y >= 0 && y < image.get_height());
+        // FIXME: gamma correction
         png::rgb_pixel pixel(clamp(color.x()), clamp(color.y()), clamp(color.z()));
         image.set_pixel(x, height() - y - 1, pixel);
     }
