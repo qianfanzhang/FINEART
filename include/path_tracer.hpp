@@ -2,6 +2,7 @@
 #define MY_PATH_TRACER_H
 
 #include "group/group.hpp"
+#include "light.hpp"
 #include "medium.hpp"
 #include "random.hpp"
 #include "ray.hpp"
@@ -9,9 +10,10 @@
 
 class PathTracer {
 public:
-    PathTracer(Group *group, Medium *medium, RandomGenerator &gen)
+    PathTracer(Group *group, Medium *medium, SkyLight *sky_light, RandomGenerator &gen)
         : group(group),
           medium(medium),
+          sky_light(sky_light),
           gen(gen) {}
 
     Vector3f getRadiance(Ray ray, int depth = 1);
@@ -23,6 +25,7 @@ public:
 private:
     Group *group;
     Medium *medium;
+    SkyLight *sky_light;
     RandomGenerator &gen;
 
     static constexpr int MIN_DEPTH = 4;

@@ -14,6 +14,10 @@
 
 class Group {
 public:
+    Group() {
+        radius = 1e5;
+    }
+
     virtual ~Group() = default;
 
     void add(Light *li) {
@@ -68,6 +72,8 @@ public:
     virtual void debug() = 0;
 
     std::vector<Light *> lights;
+
+    float radius;
 
 protected:
     std::vector<Object3D *> objects;

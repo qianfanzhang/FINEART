@@ -11,6 +11,8 @@ if (scene_name == "dragon_in_box") {
 	#include "girl_in_box.scene"
 } else if (scene_name == "glass_in_box") {
 	#include "glass_in_box.scene"
+} else if (scene_name == "glass_room") {
+	#include "glass_room.scene"
 } else if (scene_name == "house") {
 	#include "house.scene"
 } else if (scene_name == "simple_room") {
@@ -19,5 +21,7 @@ if (scene_name == "dragon_in_box") {
 	#include "sphere_in_box.scene"
 } else if (scene_name == "sphere_under_spotlight") {
 	#include "sphere_under_spotlight.scene"
+} else if (scene_name == "tree") {
+	#include "tree.scene"
 } else 
 	throw std::invalid_argument("scene not found");

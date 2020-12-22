@@ -7,6 +7,8 @@ Texture *earth = add(new Texture("texture/earth.png"));
 Texture *wood = add(new Texture("texture/wood.png"));
 Texture *marble = add(new Texture("texture/marble.png"));
 Texture *girl = add(new Texture("texture/girl.png"));
+Texture *morning = add(new Texture("texture/skylight-morn.png"));
+Texture *morning_half = add(new Texture("texture/skylight-morn-half.png"));
 
 Material *light = add(new Material({{new DiffuseBSDF(), 1}}, white, {15, 15, 15}));
 Material *light_white = add(new Material({{new DiffuseBSDF(), 1}}, white, {4, 4, 4}));

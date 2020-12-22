@@ -1,0 +1,11 @@
+camera = new ThinLenCamera({-4.78066, -20, 11.1066}, {0, 1, 0}, {0, 0, 1},
+                           90, 0, 2, resolution * 16 / 9, resolution);
+
+add(new DistantLight({-1, 0, -1}, {5, 5, 5}));
+
+add(new Mesh("mesh/tree.obj", diff_green, Matrix4f::identity(), false));
+
+// medium = new Medium({0, 0, 0}, {0.05, 0.05, 0.05}, 0);
+// sky_light = new SkyLight(morning_half, 0, {0.7, 0.7, 0.7});
+
+group->radius = 100;

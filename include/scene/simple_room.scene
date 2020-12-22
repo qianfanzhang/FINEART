@@ -6,10 +6,10 @@ camera = new ThinLenCamera({1.39, -1.53, 2.129}, {-0.68, 0.63, -0.38}, {-0.278, 
 //                            {0.1606726348400116, -0.09153932332992554, 0.982753753662109},
 //                            92, 0, 2, resolution * 16 / 9, resolution);
 
-add(new DistantLight(vec(0, -2, 0) - vec(-0.257, 3.608, 2.785), {15, 15, 15}));
+add(new DistantLight(vec(0, -2, 0) - vec(-0.257, 3.608, 2.785), {5, 5, 5}));
 // add(new PointLight({-0.14808499813079834, 0.6887220740318298, 1.7161200046539307}, 1));
 // add(new Sphere({-0.14808499813079834, 0.6887220740318298, 1.7161200046539307}, 0.3, light));
 
 add(new Mesh("mesh/simple-room.obj", diff_white, Matrix4f::identity(), false));
 
-medium = new Medium({0, 0, 0}, {0.2, 0.2, 0.2}, 0);
+medium = new Medium({0, 0, 0}, {0.2, 0.2, 0.2}, 0.5);

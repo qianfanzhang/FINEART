@@ -113,7 +113,10 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
         
         // m.disslove
 
-        materials.push_back(Material({{new DiffuseBSDF(), 1}}, color, emission, texture));
+        if (m.illum == 3)
+            materials.push_back(Material({{new RefractiveBSDF(1.5), 1}}, color, emission, texture));
+        else
+            materials.push_back(Material({{new DiffuseBSDF(), 1}}, color, emission, texture));
     }
 
     for (auto &shape : shapes) {

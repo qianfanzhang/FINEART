@@ -5,6 +5,7 @@
 #include "hit.hpp"
 #include "random.hpp"
 #include "ray.hpp"
+#include "texture.hpp"
 #include "vecmath.h"
 
 class Light {
@@ -19,7 +20,7 @@ public:
     PointLight(const Vector3f &pos, const Vector3f &intensity)
         : pos(pos), intensity(intensity) {}
 
-    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen __attribute__((unused))) override {
+    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen) override {
         dir = pos - point;
         float d2 = dir.squaredLength();
         t = std::sqrt(d2);
@@ -39,7 +40,7 @@ public:
         cos_width(std::cos(Utils::rad(width))), cos_falloff(std::cos(Utils::rad(falloff))), 
         intensity(intensity) {}
 
-    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen __attribute__((unused))) override {
+    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen) override {
         dir = pos - point;
         float d2 = dir.squaredLength();
         t = std::sqrt(d2);
@@ -67,7 +68,7 @@ public:
     DistantLight(const Vector3f &normal, const Vector3f &intensity)
         : normal(normal.normalized()), intensity(intensity) {}
 
-    Vector3f sampleRay(const Vector3f &point __attribute__((unused)), Vector3f &dir, float &t, RandomGenerator &gen __attribute__((unused))) override {
+    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen) override {
         dir = -normal;
         t = Hit::T_MAX;
         return intensity;
@@ -75,6 +76,29 @@ public:
 
 private:
     Vector3f normal;
+    Vector3f intensity;
+};
+
+class SkyLight : public Light {
+public:
+    SkyLight(Texture *texture, float offset, Vector3f intensity)
+        : texture(texture), offset(offset), intensity(intensity) {
+        if (offset < 0 || offset >= 1) {
+            std::cout << "[SkyLight] error: invalid offset value\n";
+            abort();
+        }
+    }
+
+    Vector3f sampleRay(const Vector3f &point, Vector3f &dir, float &t, RandomGenerator &gen) override {
+        // dir shoud be normalized
+        float u = Utils::getPhi(dir) * Utils::INV_2PI + offset;
+        float v = Utils::getTheta(dir) * Utils::INV_PI;
+        return intensity * texture->getColor({u > 1 ? u - 1 : u, 1 - v});
+    }
+
+private:
+    Texture *texture;
+    float offset;
     Vector3f intensity;
 };
 

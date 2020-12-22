@@ -12,6 +12,7 @@ namespace Utils {
 
 constexpr float PI = 3.1415926536f;
 constexpr float INV_PI = 1 / PI;
+constexpr float INV_2PI = 1 / (2 * PI);
 constexpr float INV_4PI = 1 / (4 * PI);
 constexpr float MACHINE_EPS = std::numeric_limits<float>::epsilon() * 0.5;
 constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
@@ -36,8 +37,17 @@ inline Vector3f clamp(Vector3f v, float limit = 1) {
 // A modf that always returns nonnagative value
 inline float fmodp(float x, float y) {
     assert(y > 0);
-    double r = std::fmod(x, y);
+    float r = std::fmod(x, y);
     return r < 0 ? r + y : r;
+}
+
+inline float getTheta(const Vector3f &v) {
+    return std::acos(v.z());
+}
+
+inline float getPhi(const Vector3f &v) {
+    float p = std::atan2(v.y(), v.x());
+    return (p < 0) ? (p + 2 * PI) : p;
 }
 
 inline Vector3f getUAxisGivenNormal(const Vector3f &normal) {

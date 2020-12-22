@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     Camera *camera = world.getCamera();
     Group *group = world.getGroup();
     Medium *medium = world.getMedium();
+    SkyLight *sky_light = world.getSkyLight();
     Image image(camera->getWidth(), camera->getHeight());
     std::random_device rd;
 
@@ -50,12 +51,12 @@ int main(int argc, char *argv[]) {
 #pragma omp parallel for schedule(dynamic, 1)
         for (int x = 0; x < camera->getWidth(); ++x) {
             RandomGenerator gen(rd());
-            PathTracer pt(group, medium, gen);
+            PathTracer pt(group, medium, sky_light, gen);
             for (int y = 0; y < camera->getHeight(); ++y) {
                 Vector3f color = Vector3f::ZERO;
                 for (int i = 0; i < n; ++i) {
                     Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f(), gen);
-                    color += Utils::clamp(pt.getRadiance(ray), 100);
+                    color += Utils::clamp(pt.getRadiance(ray), 50);
                 }
                 color_map[x][y] += color;
             }

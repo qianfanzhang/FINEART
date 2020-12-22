@@ -13,12 +13,19 @@ Vector3f PathTracer::getRadiance(Ray ray, int depth) {
     Hit hit;
     Vector3f beta(1, 1, 1);
     bool has_intersection = this->group->intersect(ray, hit);
+    if (has_intersection && ray.pointAtParameter(hit.t).length() > group->radius)
+        has_intersection = false;
 
-    // medium interaction
     Ray medium_ray = ray;
     bool has_medium_interaction = this->medium != nullptr && this->medium->interact(medium_ray, beta, this->gen, hit.t);
+    if (has_medium_interaction && medium_ray.pointAtParameter(hit.t).length() > group->radius)
+        has_medium_interaction = false;
+
+    // sky light
     if (!has_intersection && !has_medium_interaction)
-        return Vector3f::ZERO;
+        return this->sky_light ? beta * this->sky_light->sampleRay(ray.origin, ray.direction, hit.t, gen) : Vector3f::ZERO;
+
+    // medium interaction
     if (beta.length() < EPS)
         return Vector3f::ZERO;
     if (has_medium_interaction) {

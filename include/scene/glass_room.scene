@@ -1,0 +1,10 @@
+camera = new ThinLenCamera({-4.5, -5.5, 10.5}, 
+                           {0.4667035639286041, 0.6731997728347778, -0.5735764503479004}, 
+                           {0.32678937911987305, 0.47137945890426636, 0.8191520571708679},
+                           67.4, 0, 2, resolution, resolution);
+
+add(new DistantLight({0, -6, -6}, {150, 150, 150}));
+
+add(new Mesh("mesh/glass-room.obj", diff_green, Matrix4f::identity(), false));
+
+medium = new Medium({0, 0, 0}, {0.03, 0.03, 0.03}, 0);

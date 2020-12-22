@@ -15,12 +15,18 @@ public:
     Scene(const std::string &scene_name, int resolution);
 
     ~Scene() {
-        delete camera;
+        if (camera != nullptr)
+            delete camera;
         if (medium != nullptr)
             delete medium;
-        delete group;
+        if (sky_light != nullptr)
+            delete sky_light;
+        if (group != nullptr)
+            delete group;
         for (auto material : materials)
             delete material;
+        for (auto texture : textures)
+            delete texture;
     }
 
     void operator=(const Scene &) = delete;
@@ -37,10 +43,15 @@ public:
         return medium;
     }
 
+    SkyLight *getSkyLight() const {
+        return sky_light;
+    }
+
 private:
     Camera *camera;
     Group *group;
     Medium *medium;
+    SkyLight *sky_light;
     std::vector<Texture *> textures;
     std::vector<Material *> materials;
 
