@@ -1,0 +1,17 @@
+camera = new ThinLenCamera({2.78239, -3.91912, 0.979966},
+                           {0.0, 0.9986851811408997, -0.05126368999481201},
+                           {0.0, 0.05126368999481201, 0.9986851811408997},
+                           95, 0, 2, resolution * 850 / 315, resolution);
+
+// add(new PointLight({-13.6488, 25.5914, 17.061}, {8, 8, 8}));
+Vector3f c = vec(0.953125, 0.94140625, 0.78515625);
+Vector3f p = vec(-3.09977, 3.58599, 3.02023);
+Vector3f q = vec(2.76843, 1.0716141, 0);
+add(new SpotLight(p, q - p, 10, 10, vec(200, 200, 200) * c));
+// add(new SpotLight(p, {1, 0, -1}, 10, 10, vec(200, 200, 200) * c));
+// add(new DistantLight({-1, -0.2, -1.5}, vec(25, 25, 25) * vec(0.953125, 0.94140625, 0.78515625)));
+
+add(new Mesh("mesh/lighthouse.obj", diff_green, Matrix4f::identity(), true));
+
+medium = new Medium({0, 0, 0}, {0.01, 0.01, 0.01}, 0);
+// sky_light = new SkyLight(milky_way, 0.5, {0.7, 0.7, 0.7});

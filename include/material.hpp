@@ -47,6 +47,30 @@ public:
     }
 };
 
+class TranslucentBSDF : public BSDF {
+public:
+    TranslucentBSDF(float decay = 1) : decay(decay) {}
+
+    float pdf(const Vector3f &wo, const Vector3f &wi, const Vector3f &normal) const override {
+        float u = Vector3f::dot(wo, normal);
+        float v = Vector3f::dot(wi, normal);
+        return (u >= 0 && v <= 0) || (u <= 0 && v >= 0) ? decay * Utils::INV_PI : 0;
+    }
+
+    float sample(Vector3f &wo, const Vector3f &wi, const Vector3f &normal, RandomGenerator &gen) const override {
+        Vector3f normal0 = Vector3f::dot(wi, normal) > 0 ? normal : -normal;
+        wo = -gen.uniformOnHemisphere(normal0);
+        return decay;
+    }
+
+    bool isDelta() const override {
+        return false;
+    }
+
+private:
+    float decay;
+};
+
 class SpecularBSDF : public BSDF {
 public:
     SpecularBSDF() = default;
@@ -169,26 +193,23 @@ public:
             return diffuse * texture->getColor(uv);
     }
 
-    float sampleBSDF(BSDF *&bsdf, RandomGenerator &gen) {
+    BSDF *sampleBSDF(RandomGenerator &gen) {
         float p = gen.uniform();
         for (auto &bsdf_pair : bsdfs) {
             p -= bsdf_pair.second;
-            if (p <= 0) {
-                bsdf = bsdf_pair.first;
-                return bsdf_pair.second;
-            }
+            if (p <= 0)
+                return bsdf_pair.first;
         }
-        bsdf = bsdfs.back().first;
-        return bsdfs.back().second;
+        return bsdfs.back().first;
     }
 
-    float sampleRay(Ray &ray, const Hit &hit, RandomGenerator &gen) {
-        BSDF *bsdf;
-        float beta = sampleBSDF(bsdf, gen);
+    float sampleRay(Ray &ray, const Hit &hit, RandomGenerator &gen, bool &inside) {
+        BSDF *bsdf = sampleBSDF(gen);
 
         Vector3f next_d;
-        beta *= bsdf->sample(next_d, -ray.direction, hit.getNormal(), gen);
+        float beta = bsdf->sample(next_d, -ray.direction, hit.normal, gen);
         ray = Ray(ray.pointAtParameter(hit.getT()), next_d);
+        inside = Vector3f::dot(next_d, hit.normal) < 0;
 
         return beta;
     }

@@ -17,7 +17,12 @@ set(BINART_SOURCES
         src/mesh.cpp
         src/kd_tree.cpp
         src/path_tracer.cpp
-        src/scene.cpp)
+        src/scene.cpp
+        src/utils.cpp)
+
+set(MERGE_SOURCES
+        src/merge.cpp
+        src/utils.cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -26,8 +31,13 @@ add_executable(${PROJECT_NAME} ${BINART_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE vecmath)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
+add_executable(merge ${MERGE_SOURCES})
+target_link_libraries(merge PRIVATE vecmath)
+target_include_directories(merge PRIVATE include)
+
 find_package(OpenMP REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 
 find_package(PNG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PNG_LIBRARY})
+target_link_libraries(merge PUBLIC ${PNG_LIBRARY})

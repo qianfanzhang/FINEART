@@ -13,8 +13,24 @@ if (scene_name == "dragon_in_box") {
 	#include "glass_in_box.scene"
 } else if (scene_name == "glass_room") {
 	#include "glass_room.scene"
+} else if (scene_name == "great_white") {
+	#include "great_white.scene"
+} else if (scene_name == "hms_bak") {
+	#include "hms_bak.scene"
+} else if (scene_name == "hms") {
+	#include "hms.scene"
+} else if (scene_name == "hms_sunset") {
+	#include "hms_sunset.scene"
 } else if (scene_name == "house") {
 	#include "house.scene"
+} else if (scene_name == "island") {
+	#include "island.scene"
+} else if (scene_name == "lighthouse") {
+	#include "lighthouse.scene"
+} else if (scene_name == "ocean") {
+	#include "ocean.scene"
+} else if (scene_name == "pool") {
+	#include "pool.scene"
 } else if (scene_name == "simple_room") {
 	#include "simple_room.scene"
 } else if (scene_name == "sphere_in_box") {

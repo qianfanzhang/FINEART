@@ -15,7 +15,7 @@
 class Group {
 public:
     Group() {
-        radius = 1e5;
+        world_bound = nullptr;
     }
 
     virtual ~Group() = default;
@@ -32,8 +32,8 @@ public:
     Vector3f sampleAllLights(const Ray &ray, const Hit &hit, Material *material, Medium *medium, RandomGenerator &gen) {
         assert(material != nullptr || medium != nullptr);
 
-        BSDF *bsdf = nullptr;
-        float beta = material == nullptr ? 1 : material->sampleBSDF(bsdf, gen);
+        BSDF *bsdf = material ? material->sampleBSDF(gen) : nullptr;
+        float beta = 1;
         if (material != nullptr)
             assert(bsdf != nullptr);
         if (bsdf != nullptr && bsdf->isDelta())
@@ -50,14 +50,21 @@ public:
                 continue;
             Hit tmp_hit;
             tmp_hit.t = li_t;
-            if (!intersect(Ray(point, dir), tmp_hit)) {
-                // FIXME: unhandleled medium interaction
+            bool intersected = intersect(Ray(point, dir), tmp_hit);
+            if (!intersected || tmp_hit.object == world_bound) {
+                Vector3f tmp_beta = 1;
+                if (medium != nullptr) {
+                    Ray medium_ray = ray;
+                    bool has_medium_interaction = medium->inte`ract(medium_ray, tmp_beta, gen, tmp_hit.t);
+                    if (has_medium_interaction)
+                        continue;
+                }
                 if (bsdf != nullptr) {
                     float f = bsdf->pdf(dir, -ray.direction, hit.normal) * std::abs(Vector3f::dot(dir, hit.normal));
-                    L += beta * intensity * f;
+                    L += tmp_beta * beta * intensity * f;
                 } else {
                     float f = medium->pdf(dir, -ray.direction);
-                    L += beta * intensity * f;
+                    L += tmp_beta * beta * intensity * f;
                 }
             }
         }
@@ -73,7 +80,7 @@ public:
 
     std::vector<Light *> lights;
 
-    float radius;
+    Object3D *world_bound;
 
 protected:
     std::vector<Object3D *> objects;

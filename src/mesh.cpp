@@ -57,8 +57,8 @@ bool Mesh::intersect(const Ray &r, Hit &h) {
     return result;
 }
 
-Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform, bool use_vec_normal)
-    : Object3D(fallback_material), use_vec_normal(use_vec_normal) {
+Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform, bool use_vec_normal, Medium *medium)
+    : Object3D(fallback_material, medium), use_vec_normal(use_vec_normal) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> obj_materials;
@@ -114,7 +114,9 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
         // m.disslove
 
         if (m.illum == 3)
-            materials.push_back(Material({{new RefractiveBSDF(1.5), 1}}, color, emission, texture));
+            materials.push_back(Material({{new RefractiveBSDF(1.5), 1}}, color, emission, texture));            
+        else if (m.illum == 4)
+            materials.push_back(Material({{new DiffuseBSDF(), 0.4}, {new TranslucentBSDF(), 0.6}}, color, emission, texture));
         else
             materials.push_back(Material({{new DiffuseBSDF(), 1}}, color, emission, texture));
     }
@@ -126,7 +128,7 @@ Mesh::Mesh(const char *filename, Material *fallback_material, Matrix4f transform
             int mid = shape.mesh.material_ids[f];
             assert(fv == 3);
 
-            Triangle triangle(mid == -1 ? fallback_material : &materials[mid], this);
+            Triangle triangle(mid == -1 ? fallback_material : &materials[mid], medium, this);
             for (int i = 0; i < fv; ++i) {
                 triangle._v[i] = shape.mesh.indices[index_offset + i].vertex_index + 1;
                 triangle._n[i] = use_vec_normal ? shape.mesh.indices[index_offset + i].normal_index + 1 : 0;

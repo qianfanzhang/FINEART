@@ -84,7 +84,7 @@ public:
     SkyLight(Texture *texture, float offset, Vector3f intensity)
         : texture(texture), offset(offset), intensity(intensity) {
         if (offset < 0 || offset >= 1) {
-            std::cout << "[SkyLight] error: invalid offset value\n";
+            std::cout << "[SkyLight] error: invalid offset value" << std::endl;
             abort();
         }
     }

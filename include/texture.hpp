@@ -14,13 +14,13 @@ public:
     }
 
     Texture(const std::string filename) {
-        this->image = new Image(filename);
+        this->image = load_image(filename);
         this->scale = {1, 1, 1};
         assert(image != nullptr);
     }
 
     Texture(const std::string filename, Vector3f scale) {
-        this->image = new Image(filename);
+        this->image = load_image(filename);
         this->scale = scale;
         assert(image != nullptr);
     }

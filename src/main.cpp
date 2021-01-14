@@ -1,3 +1,6 @@
+#define TINYEXR_IMPLEMENTATION
+#include "tinyexr.hpp"
+
 #include "camera.hpp"
 #include "group/group.hpp"
 #include "image.hpp"
@@ -14,9 +17,8 @@
 #include <string>
 
 const int STEP_SIZE = 100;
-const int MAX_SIZE = 2048;
 
-Vector3f color_map[MAX_SIZE][MAX_SIZE];
+Vector3f color_map[Utils::MAX_RESOLUTION][Utils::MAX_RESOLUTION];
 
 int main(int argc, char *argv[]) {
     auto program_start = std::chrono::system_clock::now();
@@ -27,17 +29,22 @@ int main(int argc, char *argv[]) {
     }
 
     std::string scene_name = argv[1];
-    std::string output_prefix = "output/" + scene_name;
+    std::string output_name = "output/" + scene_name + ".png";
+    std::string checkpoint_name = "checkpoint/" + scene_name + std::to_string(time(nullptr)) + ".ckpt";
     int num_samples = std::stoi(argv[2]);
     int resolution = std::stoi(argv[3]);
 
     Scene world(scene_name, resolution);
+
     Camera *camera = world.getCamera();
     Group *group = world.getGroup();
     Medium *medium = world.getMedium();
+    Medium *start_medium = world.getStartMedium();
     SkyLight *sky_light = world.getSkyLight();
-    Image image(camera->getWidth(), camera->getHeight());
     std::random_device rd;
+
+    assert(camera->getWidth() < Utils::MAX_RESOLUTION);
+    assert(camera->getHeight() < Utils::MAX_RESOLUTION);
 
     std::cout << "[main] start rendering " << scene_name << " with sample=" << num_samples << ", resolution=" << resolution << std::endl;
     PathTracer::debug();
@@ -56,21 +63,15 @@ int main(int argc, char *argv[]) {
                 Vector3f color = Vector3f::ZERO;
                 for (int i = 0; i < n; ++i) {
                     Ray ray = camera->generateRay(Vector2f(x, y) + gen.tent2f(), gen);
-                    color += Utils::clamp(pt.getRadiance(ray), 50);
+                    color += Utils::clamp(pt.getRadiance(ray, start_medium), 100);
                 }
                 color_map[x][y] += color;
             }
         }
 
         iter += n;
-        for (int x = 0; x < camera->getWidth(); ++x) {
-            for (int y = 0; y < camera->getHeight(); ++y) {
-                image.set(x, y, color_map[x][y] / iter);
-            }
-        }
-
-        std::string output_file = output_prefix + ".png";
-        image.save(output_file.c_str());
+        Utils::save_image(iter, camera->getWidth(), camera->getHeight(), color_map, output_name);
+        Utils::save_checkpoint(iter, camera->getWidth(), camera->getHeight(), color_map, checkpoint_name);
 
         auto iteration_end = std::chrono::system_clock::now();
         std::chrono::duration<double> diff = iteration_end - iteration_start;

@@ -3,6 +3,7 @@
 ./build.sh || exit 1
 
 mkdir -p output
+mkdir -p checkpoint
 scene_name=$1
 num_samples=$2
 resolution=$3

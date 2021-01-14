@@ -4,12 +4,16 @@
 #include "vecmath.h"
 #include <cassert>
 #include <cmath>
+#include <fcntl.h>
 #include <limits>
+#include <string>
+#include <unistd.h>
 
 #define UNUSED __attribute__((unused))
 
 namespace Utils {
 
+constexpr int MAX_RESOLUTION = 4005;
 constexpr float PI = 3.1415926536f;
 constexpr float INV_PI = 1 / PI;
 constexpr float INV_2PI = 1 / (2 * PI);
@@ -28,6 +32,10 @@ inline float rad(float deg) {
 
 inline float clamp(float x, float limit = 1) {
     return x < 0 ? 0 : (x < limit ? x : limit);
+}
+
+inline int gamma_corr(float x) {
+    return int(std::pow(clamp(x), 1 / 2.2) * 255 + .5);
 }
 
 inline Vector3f clamp(Vector3f v, float limit = 1) {
@@ -69,6 +77,25 @@ inline Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
 inline Vector3f transformNormal(const Matrix4f &mat, const Vector3f &dir) {
     return (mat.inverse().transposed() * Vector4f(dir, 0)).xyz();
 }
+
+inline int open_bytefile(const std::string &filename) {
+    return open(filename.c_str(), O_RDWR | O_CREAT | O_APPEND);
+}
+
+template <typename T>
+inline void write_bytes(int fd, const T &data) {
+    write(fd, (const char *)&data, sizeof(T));
+}
+
+template <typename T>
+inline bool read_bytes(int fd, T &data) {
+    int size = read(fd, (char *)&data, sizeof(data));
+    return size < sizeof(data);
+}
+
+void save_image(int num_samples, int width, int height, Vector3f rgb[][Utils::MAX_RESOLUTION], const std::string &filename);
+void save_checkpoint(int num_samples, int width, int height, Vector3f rgb[][Utils::MAX_RESOLUTION], const std::string &filename);
+void load_checkpoint(int &num_samples, int &width, int &height, Vector3f rgb[][Utils::MAX_RESOLUTION], const std::string &filename);
 
 } // namespace Utils
 

@@ -4,6 +4,7 @@
 #include "bounding_box.hpp"
 #include "hit.hpp"
 #include "material.hpp"
+#include "medium.hpp"
 #include "ray.hpp"
 #include "vecmath.h"
 #include <cstdio>
@@ -16,14 +17,18 @@ class Object3D {
 public:
     Object3D() : material(nullptr) {}
 
-    explicit Object3D(Material *material)
-        : material(material) {}
+    explicit Object3D(Material *material, Medium *medium = nullptr)
+        : material(material), medium(medium) {}
 
     virtual ~Object3D() = default;
 
     virtual Material *getMaterial() const {
         assert(material != nullptr);
         return material;
+    }
+
+    virtual Medium *getMedium() const {
+        return medium;
     }
 
     virtual std::vector<Object3D *> getBasicObjects() {
@@ -46,6 +51,7 @@ public:
 
 private:
     Material *material;
+    Medium *medium;
 };
 
 #endif

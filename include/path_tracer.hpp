@@ -16,7 +16,11 @@ public:
           sky_light(sky_light),
           gen(gen) {}
 
-    Vector3f getRadiance(Ray ray, int depth = 1);
+    Vector3f getRadiance(Ray ray, Medium *start_medium) {
+        return getRadiance(ray, 1, start_medium == nullptr ? medium : start_medium);
+    }
+
+    Vector3f getRadiance(Ray ray, int depth, Medium *medium);
 
     static void debug() {
         std::cout << "[PathTracer] MIN_DEPTH=" << MIN_DEPTH << ", MAX_DEPTH=" << MAX_DEPTH << std::endl;

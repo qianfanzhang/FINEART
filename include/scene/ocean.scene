@@ -1,0 +1,15 @@
+camera = new ThinLenCamera({-0.1, -15, -5},
+                           {0.0, 0.994521975517273, 0.10452881455421448},
+                           {0.0, -0.10452881455421448, 0.994521975517273},
+                           90, 0, 2, resolution * 16 / 9, resolution);
+
+// add(new PointLight({-13.6488, 25.5914, 17.061}, {8, 8, 8}));
+add(new DistantLight({-1, -0.2, -1.5}, vec(1000, 1000, 1000)));
+
+Medium *water_medium = new Medium({0.1, 0.001, 0.001}, {1, 1, 1}, 0);
+
+add(new Mesh("mesh/ocean.obj", diff_green, Matrix4f::identity(), true, water_medium));
+
+medium = new Medium({0, 0, 0}, {0.0001, 0.0001, 0.001}, 0);
+start_medium = water_medium;
+sky_light = new SkyLight(morning_half, 0.5, {0.7, 0.7, 0.7});

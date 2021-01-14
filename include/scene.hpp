@@ -43,6 +43,10 @@ public:
         return medium;
     }
 
+    Medium *getStartMedium() const {
+        return start_medium;
+    }
+
     SkyLight *getSkyLight() const {
         return sky_light;
     }
@@ -50,7 +54,7 @@ public:
 private:
     Camera *camera;
     Group *group;
-    Medium *medium;
+    Medium *medium, *start_medium;
     SkyLight *sky_light;
     std::vector<Texture *> textures;
     std::vector<Material *> materials;

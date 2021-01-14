@@ -1,11 +1,15 @@
-camera = new ThinLenCamera({-4.78066, -20, 11.1066}, {0, 1, 0}, {0, 0, 1},
+// camera = new ThinLenCamera({-4.78066, -60, 11.1066}, {0, 1, 0}, {0, 0, 1},
+//                           50, 0, 2, resolution * 16 / 9, resolution);
+camera = new ThinLenCamera({-22.9408, -9.82961, 13.1255},
+                           {0.6634138822555542, 0.5566703677177429, -0.5},
+                           {0.38302215933799744, 0.38302215933799744, 0.8660253882408142},
                            90, 0, 2, resolution * 16 / 9, resolution);
 
-add(new DistantLight({-1, 0, -1}, {5, 5, 5}));
+add(new DistantLight({-1, 0, -1}, {8, 8, 8}));
 
 add(new Mesh("mesh/tree.obj", diff_green, Matrix4f::identity(), false));
 
-// medium = new Medium({0, 0, 0}, {0.05, 0.05, 0.05}, 0);
+medium = new Medium({0, 0, 0}, {0.02, 0.02, 0.02}, 0);
 // sky_light = new SkyLight(morning_half, 0, {0.7, 0.7, 0.7});
 
-group->radius = 100;
+// group->radius = 40;

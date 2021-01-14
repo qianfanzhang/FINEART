@@ -1,0 +1,15 @@
+camera = new ThinLenCamera({77.23894500732422, -41.2625732421875, 9.994756698608398},
+                           {-0.8560157418251038, 0.43390658497810364, -0.2810024917125702},
+                           {-0.25064194202423096, 0.12704725563526154, 0.9597070217132568},
+                           50, 0, 2, resolution * 16 / 9, resolution);
+
+add(new DistantLight({0.0, -0.1554218828678131, -0.987848162651062},
+                     {500, 500, 500}));
+
+// Medium *water_medium = new Medium(vec(1. / 3, 1. / 6, 1. / 8) / 3, {0.015, 0.015, 0.015}, 0);
+add(new Mesh("mesh/pool.obj", diff_green, Matrix4f::identity(), false));
+
+// medium = new Medium({1./253, 1./94, 1./83}, {0.002, 0.002, 0.002}, 0);
+// medium = new Medium({0.01, 0.01, 0.01}, {0.001, 0.001, 0.001}, 0);
+// start_medium = water_medium;
+sky_light = new SkyLight(morning_half, 0.5, {0.7, 0.7, 0.7});

@@ -31,6 +31,8 @@ Scene::Scene(const std::string &scene_name, int resolution) {
     std::cout << "[Scene] start building " << scene_name << std::endl;
 
     medium = nullptr;
+    start_medium = nullptr;
+    sky_light = nullptr;
 
     group = new KdTree();
 

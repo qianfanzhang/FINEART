@@ -9,7 +9,7 @@ class Triangle;
 
 class Mesh : public Object3D {
 public:
-    Mesh(const char *filename, Material *fallback_material, Matrix4f transform = Matrix4f::identity(), bool use_vec_normal = false);
+    Mesh(const char *filename, Material *fallback_material, Matrix4f transform = Matrix4f::identity(), bool use_vec_normal = false, Medium *medium = nullptr);
 
     std::vector<Object3D *> getBasicObjects() override;
 
@@ -37,7 +37,7 @@ public:
 
 class Triangle : public Object3D {
 public:
-    Triangle(Material *material, Mesh *mesh) : Object3D(material), mesh(mesh) {
+    Triangle(Material *material, Medium *medium, Mesh *mesh) : Object3D(material, medium), mesh(mesh) {
         _v[0] = _v[1] = _v[2] = 0;
         _t[0] = _t[1] = _t[2] = 0;
         _n[0] = _n[1] = _n[2] = 0;

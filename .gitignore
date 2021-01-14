@@ -39,10 +39,12 @@ deps/vecmath/cmake_install.cmake
 
 # Outputs
 output*/
+checkpoint/
+result/
 
 # VSCode
 .vscode/
 
 # Big obj files
-mesh/house.obj
-mesh/tree.obj
+mesh/
+texture/

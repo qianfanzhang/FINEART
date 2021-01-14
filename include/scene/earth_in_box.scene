@@ -3,8 +3,8 @@ camera = new ThinLenCamera(vec(0, 0.4, 7), vec(0, -0.17, -1), vec(0, 1, 0),
 
 group->add(new Sphere(vec(0, 3.5, 0.75), 1.82, light));
 
-group->add(new Sphere(vec(-1, 0.4, -1), 0.5, diff_earth));
-group->add(new Sphere(vec(-1, -1, 1), 0.5, diff_earth));
+group->add(new Sphere(vec(-1, 0.4, -1), 0.5, translucent));
+group->add(new Sphere(vec(-1, -1, 1), 0.5, refr_white0));
 
 group->add(new Sphere(vec(1.3, -0.5, -1.3), 0.5, spec));
 group->add(new Sphere(vec(0.75, -1, 1.5), 0.7, refr));

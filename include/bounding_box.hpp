@@ -60,7 +60,6 @@ struct BoundingBox {
                 std::swap(t_near, t_far);
             tmin = t_near > tmin ? t_near : tmin;
             tmax = t_far < tmax ? t_far : tmax;
-            // tmax *= 1 + 2 * Utils::gamma(3); // for precision, see pbrt
             if (tmin > tmax)
                 return false;
         }
