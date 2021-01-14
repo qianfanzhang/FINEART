@@ -1,6 +1,4 @@
-# BINART Is Not A Ray Tracer
-
-A simple ray tracer (so far).
+# FINEART Is Not Exactly A Ray Tracer
 
 ## Build
 
@@ -10,4 +8,10 @@ Dependencies: cmake, openmp, libpng++
 
 ## Run
 
-Run `./run_all.sh $num_samples $resolutions`.
+Run `./run_all.sh $scene_name $num_samples $resolutions`.
+
+## Demo scenes
+
+![plot](./hms_sunset.png)
+
+![plot](./hms_dusk.png)

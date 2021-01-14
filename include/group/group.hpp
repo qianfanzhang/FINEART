@@ -55,7 +55,7 @@ public:
                 Vector3f tmp_beta = 1;
                 if (medium != nullptr) {
                     Ray medium_ray = ray;
-                    bool has_medium_interaction = medium->inte`ract(medium_ray, tmp_beta, gen, tmp_hit.t);
+                    bool has_medium_interaction = medium->interact(medium_ray, tmp_beta, gen, tmp_hit.t);
                     if (has_medium_interaction)
                         continue;
                 }

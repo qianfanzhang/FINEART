@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(BINART CXX)
+project(FINEART CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 add_subdirectory(deps/vecmath)
 
-set(BINART_SOURCES
+set(FINEART_SOURCES
         src/main.cpp
         src/mesh.cpp
         src/kd_tree.cpp
@@ -27,7 +27,7 @@ set(MERGE_SOURCES
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-add_executable(${PROJECT_NAME} ${BINART_SOURCES})
+add_executable(${PROJECT_NAME} ${FINEART_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE vecmath)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 

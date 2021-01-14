@@ -22,7 +22,7 @@ Vector3f color_map[Utils::MAX_RESOLUTION][Utils::MAX_RESOLUTION];
 
 int main(int argc, char *argv[]) {
     auto program_start = std::chrono::system_clock::now();
-    std::cout << "[main] BINART start" << std::endl;
+    std::cout << "[main] FINEART start" << std::endl;
 
     if (argc != 4) {
         throw std::invalid_argument("too few arguments");
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
     auto program_end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = program_end - program_start;
-    std::cout << "[main] BINART ended in " << diff.count() / 60 << " min" << std::endl;
+    std::cout << "[main] FINEART ended in " << diff.count() / 60 << " min" << std::endl;
 
     return 0;
 }
